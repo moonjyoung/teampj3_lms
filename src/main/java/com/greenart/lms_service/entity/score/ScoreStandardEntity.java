@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ScoreStandardEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ss_seq") private Long ssSeq;
-    @Column(name = "ss_total_score") private Integer ssTotalScore;
+    @Column(name = "ss_score_max") private Integer ssScoreMax;
     @ManyToOne @JoinColumn(name = "ss_sc_seq") private ScoreCateEntity scoreCate;
     @ManyToOne @JoinColumn(name = "ss_li_seq") private LectureInfoEntity lectureInfo;
     @Column(name = "ss_status") private Boolean ssStatus;
