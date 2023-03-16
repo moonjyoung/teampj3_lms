@@ -1,4 +1,4 @@
-package com.greenart.lms_service.entity;
+package com.greenart.lms_service.entity.member;
 
 import org.hibernate.annotations.DynamicInsert;
 

@@ -1,4 +1,4 @@
-package com.greenart.lms_service.entity;
+package com.greenart.lms_service.entity.member;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @DynamicInsert
 @Entity
-@Table(name = "professor")
-@DiscriminatorValue("P")
-public class ProfessorEntity extends MemberBasicEntity {
-    @Column(name = "prof_subject") private String profSubject;
+@Table(name = "staff")
+@DiscriminatorValue("U")
+public class StaffEntity extends MemberBasicEntity {
+    @Column(name = "staff_work") private String staffWork;
 
     @Builder
-    public ProfessorEntity(String mbId, String mbPwd, String mbName, String mbEmail, String profSubject) {
+    public StaffEntity(String mbId, String mbPwd, String mbName, String mbEmail, String staffWork) {
         super(mbId, mbPwd, mbName, mbEmail);
-        this.profSubject = profSubject;
+        this.staffWork = staffWork;
     }
 }
