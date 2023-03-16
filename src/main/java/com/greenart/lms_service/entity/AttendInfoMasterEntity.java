@@ -2,14 +2,9 @@ package com.greenart.lms_service.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +19,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class AttendInfoMasterEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ai_mas_seq") private Long aiMasSeq;
-    @Column(name = "ai_mas_date") private LocalDate aiMasDate;
-    @Column(name = "ai_mas_li_seq") private Long aiMasLiSeq;
+    @Column(name = "amas_seq") private Long aMasSeq;
+    @Column(name = "amas_date") private LocalDate aMasDate;
+    @ManyToOne
+    @JoinColumn(name = "amas_li_seq") private LectureInfoEntity lecture;
 }

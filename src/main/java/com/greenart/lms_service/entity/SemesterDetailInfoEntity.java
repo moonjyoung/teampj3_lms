@@ -2,14 +2,9 @@ package com.greenart.lms_service.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +23,7 @@ public class SemesterDetailInfoEntity {
     @Column(name = "sdi_week") private Integer sdiWeek;
     @Column(name = "sdi_start") private LocalDate sdiStart;
     @Column(name = "sdi_end") private LocalDate sdiEnd;
-    @Column(name = "sdi_si_seq") private Long sdiSiSeq;
+    @OneToOne
+    @JoinColumn(name = "sdi_si_seq") private SemesterInfoEntity semester;
     @Column(name = "sdi_memo") private String sdiMemo;
 }

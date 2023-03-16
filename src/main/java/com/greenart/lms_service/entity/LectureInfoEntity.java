@@ -1,15 +1,9 @@
 package com.greenart.lms_service.entity;
 
+import com.greenart.lms_service.entity.member.MemberBasicEntity;
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +25,8 @@ public class LectureInfoEntity {
     @Column(name = "li_grade") private Integer liGrade;
     @Column(name = "li_evaluation_type") private Integer liEvaluation_type;
     @Column(name = "li_content") private String liContent;
-    @Column(name = "li_prof_seq") private Long liProfSeq;
+    @ManyToOne
+    @JoinColumn(name = "li_mb_seq") private MemberBasicEntity professor;
     // @Column(name = "li_si_seq") private Long liSiSeq;
     @OneToOne @JoinColumn(name = "li_si_seq") SemesterInfoEntity semesterInfoEntity;
 }

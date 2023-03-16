@@ -1,13 +1,8 @@
 package com.greenart.lms_service.entity;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +21,6 @@ public class ClassDateEntity {
     @Column(name = "cd_week") private Integer cdWeek;
     @Column(name = "cd_start") private Integer cdStart;
     @Column(name = "cd_last") private Integer cdLast;
-    @Column(name = "cd_li_seq") private Long cdLiSeq;
+    @ManyToOne
+    @JoinColumn(name = "cd_li_seq") private LectureInfoEntity lecture;
 }
