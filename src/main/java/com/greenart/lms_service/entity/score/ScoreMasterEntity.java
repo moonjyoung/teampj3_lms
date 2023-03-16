@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "score_master")
 public class ScoreMasterEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "s_mas_seq") private Long sMasSeq;
-    @Column(name = "s_mas_ss_seq") private Long sMasSsSeq;
-    @Column(name = "s_mas_name") private String sMasName;
-    @Column(name = "s_mas_date") private LocalDate sMasDate;
-    @Column(name = "s_mas_score") private Integer sMasScore;
+    @Column(name = "smas_seq") private Long smasSeq;
+    @Column(name = "smas_ss_seq") private Long smasSsSeq;
+    @Column(name = "smas_name") private String smasName;
+    @Column(name = "smas_date") private LocalDate smasDate;
+    @Column(name = "smas_score") private Integer smasScore;
 }
