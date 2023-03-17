@@ -1,6 +1,6 @@
 package com.greenart.lms_service.entity;
 
-import com.greenart.lms_service.entity.member.MemberBasicEntity;
+import com.greenart.lms_service.entity.member.StudentEntity;
 import com.greenart.lms_service.entity.score.FInalGradeEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -23,7 +23,7 @@ public class ClassRegisterEntity {
     @ManyToOne
     @JoinColumn(name = "cr_li_seq") private LectureInfoEntity lectureInfo;
 
-    @ManyToOne @JoinColumn(name = "cr_mb_seq") private MemberBasicEntity student;
+    @ManyToOne @JoinColumn(name = "cr_mb_seq") private StudentEntity student; // MemberBasicInfoEntity에서 StudentEntity로 바뀜
     @OneToOne
     @JoinColumn(name = "cr_fg_seq") private FInalGradeEntity finalGrade;
 }
