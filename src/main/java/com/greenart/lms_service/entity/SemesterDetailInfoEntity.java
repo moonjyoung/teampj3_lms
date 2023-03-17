@@ -23,7 +23,6 @@ public class SemesterDetailInfoEntity {
     @Column(name = "sdi_week") private Integer sdiWeek;
     @Column(name = "sdi_start") private LocalDate sdiStart;
     @Column(name = "sdi_end") private LocalDate sdiEnd;
-    @OneToOne
-    @JoinColumn(name = "sdi_si_seq") private SemesterInfoEntity semester;
+    @OneToOne @JoinColumn(name = "sdi_si_seq") private SemesterInfoEntity semester;
     @Column(name = "sdi_memo") private String sdiMemo;
 }

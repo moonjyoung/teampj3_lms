@@ -21,6 +21,5 @@ public class ClassDateEntity {
     @Column(name = "cd_week") private Integer cdWeek;
     @Column(name = "cd_start") private Integer cdStart;
     @Column(name = "cd_last") private Integer cdLast;
-    @ManyToOne
-    @JoinColumn(name = "cd_li_seq") private LectureInfoEntity lecture;
+    @ManyToOne @JoinColumn(name = "cd_li_seq") private LectureInfoEntity lecture;
 }
