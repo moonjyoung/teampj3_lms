@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class BasicResponse {
-    @Schema(description = "성공(true)/실패(false)", example = "false")
-    private Boolean status;
+    @Schema(description = "성공(true)/실패(false)", example = "true/false")
+    protected Boolean status;
     @Schema(description = "메시지", example = "message")
-    private String message;
+    protected String message;
 
     public BasicResponse() {
         this.status = true;

@@ -21,6 +21,7 @@ import com.greenart.lms_service.entity.member.StudentEntity;
 import com.greenart.lms_service.entity.score.ScoreCateEntity;
 import com.greenart.lms_service.entity.score.ScoreMasterEntity;
 import com.greenart.lms_service.entity.score.ScoreStandardEntity;
+import com.greenart.lms_service.entity.score.ScoreStudentEntity;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.repository.AttendInfoMasterRepository;
 import com.greenart.lms_service.repository.AttendInfoStudentRepository;
@@ -36,6 +37,9 @@ import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
 import com.greenart.lms_service.vo.attend.AttendResponseVO;
 import com.greenart.lms_service.vo.attend.AttendStuResponseVO;
+import com.greenart.lms_service.vo.score.ScoreMasResponseVO;
+import com.greenart.lms_service.vo.score.ScoreResponseVO;
+import com.greenart.lms_service.vo.score.ScoreStuResponseVO;
 
 import jakarta.transaction.Transactional;
 
@@ -118,7 +122,7 @@ class AttendServiceApplicationTests {
                 attStu.setStatus(status);
                 attStuList.add(attStu);
             }
-            attMas.setSeq(stuData.getMbSeq());
+            attMas.setMbSeq(stuData.getMbSeq());
             attMas.setName(stuData.getMbName());
             attMas.setList(attStuList);
             resultList.add(attMas);
@@ -218,5 +222,38 @@ class AttendServiceApplicationTests {
 			System.out.println("평가일 : "+sMasEntity.getSmasDate());
 		}
 	}
+
+    @Test
+    void getTestScore() {
+        LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        ScoreCateEntity scoreCate = scoreCateRepository.findById(2L).orElseThrow(() -> new CustomException("존재하지 않는 평가기준입니다."));
+        ScoreStandardEntity scoreStan = scoreStandardRepository.findByLectureInfoAndScoreCate(lecture, scoreCate);
+        if (scoreStan==null) throw new CustomException("이 강의에서 평가하지 않는 기준입니다.");
+        List<ScoreMasterEntity> scoreMasList = scoreMasterRepository.findByScoreStandard(scoreStan);
+        ScoreResponseVO response = new ScoreResponseVO();
+        List<ScoreMasResponseVO> resultList = new ArrayList<>();
+        List<ScoreStuResponseVO> sstuList = new ArrayList<>();
+        for (ScoreMasterEntity data : scoreMasList) {
+            ScoreMasResponseVO result = new ScoreMasResponseVO();
+            for (StudentEntity data2 : studentRepository.findAll()) {
+                ScoreStuResponseVO sstuResponse = new ScoreStuResponseVO();
+                ScoreStudentEntity scoreStu = scoreStudentRepository.findByScoreMasterAndStudent(data, data2);
+                sstuResponse.setSstuSeq(data2.getMbSeq());
+                sstuResponse.setSstuName(data2.getMbName());
+                sstuResponse.setSstuScore(scoreStu.getSStuScore());
+                sstuList.add(sstuResponse);
+            }
+            result.setSmasSeq(data.getSmasSeq());
+            result.setSmasName(data.getSmasName());
+            result.setSmasDate(data.getSmasDate());
+            result.setSmasScore(data.getSmasScore());
+            result.setList(sstuList);
+            resultList.add(result);
+        }
+        response.setList(resultList);
+        response.setStatus(true);
+        response.setMessage("조회 성공");
+        System.out.println(response);
+    }
 
 }

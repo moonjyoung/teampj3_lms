@@ -38,7 +38,7 @@ public class AttendService {
     private final StudentRepository studentRepository;
 
     public List<AttendResponseVO> getAttendDay(Long liSeq) {
-        LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
         List<StudentEntity> stuList = new ArrayList<>();
         for (ClassRegisterEntity data : classRegisterRepository.findByLectureInfo(lecture)) {
             stuList.add(data.getStudent());
@@ -53,11 +53,14 @@ public class AttendService {
                 if (data.getAstuStatus()==null) status = "";
                 else if (data.getAstuStatus()==1) status = "O";
                 else if (data.getAstuStatus()==0) status = "X";
+                attStu.setAmasSeq(data.getAttendInfoMaster().getAmasSeq());
                 attStu.setDate(data.getAttendInfoMaster().getAmasDate());
                 attStu.setStatus(status);
                 attStuList.add(attStu);
             }
-            attMas.setSeq(stuData.getMbSeq());
+            attMas.setStatus(true);
+            attMas.setMessage("조회 성공");
+            attMas.setMbSeq(stuData.getMbSeq());
             attMas.setName(stuData.getMbName());
             attMas.setList(attStuList);
             resultList.add(attMas);
@@ -67,14 +70,14 @@ public class AttendService {
     }
 
     public BasicResponse patchAttendAll(Long liSeq, AttendAllDayRequestVO request) {
-        Integer status = request.getStatus();
+        Integer aStatus = request.getAStatus();
         LocalDate date = request.getDate();
         System.out.println("+++++"+date);
         LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
         AttendInfoMasterEntity data = attendInfoMasterRepository.findByLectureAndAmasDate(lecture, date);
         if (data==null) throw new CustomException("강의일을 확인하세요.");
         for (AttendInfoStudentEntity data2 : attendInfoStudentRepository.findByAttendInfoMaster(data)) {
-            data2.ChangeStatus(status);
+            data2.ChangeStatus(aStatus);
             attendInfoStudentRepository.save(data2);
         }
 
