@@ -57,10 +57,10 @@ public class ScoreService {
             for (StudentEntity data2 : stuList) {
                 ScoreStuResponseVO sstuResponse = new ScoreStuResponseVO();
                 ScoreStudentEntity scoreStu = scoreStudentRepository.findByScoreMasterAndStudent(data, data2);
-                sstuResponse.setSstuSeq(scoreStu.getSStuSeq());
+                sstuResponse.setSstuSeq(scoreStu.getSstuSeq());
                 sstuResponse.setMbSeq(scoreStu.getStudent().getMbSeq());
                 sstuResponse.setName(scoreStu.getStudent().getMbName());
-                sstuResponse.setScore(scoreStu.getSStuScore());
+                sstuResponse.setScore(scoreStu.getSstuScore());
                 sstuList.add(sstuResponse);
             }
             result.setSmasSeq(data.getSmasSeq());

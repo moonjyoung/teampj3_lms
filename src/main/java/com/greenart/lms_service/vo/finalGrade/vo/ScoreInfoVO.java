@@ -1,4 +1,4 @@
-package com.greenart.lms_service.finalscore.VO;
+package com.greenart.lms_service.vo.finalGrade.vo;
 
 import lombok.*;
 

@@ -1,13 +1,13 @@
 package com.greenart.lms_service.entity;
 
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.greenart.lms_service.entity.member.StudentEntity;
-import com.greenart.lms_service.entity.score.FInalGradeEntity;
+import com.greenart.lms_service.entity.score.FinalGradeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,13 +15,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
@@ -35,6 +32,6 @@ public class ClassRegisterEntity {
 
     @ManyToOne @JoinColumn(name = "cr_mb_seq") private StudentEntity student;
 
-    @OneToOne @JoinColumn(name = "cr_fg_seq") private FInalGradeEntity finalGrade;
+    @OneToOne @JoinColumn(name = "cr_fg_seq") private FinalGradeEntity finalGrade;
 
 }

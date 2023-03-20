@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DynamicInsert
 @Table(name = "final_grade")
-public class FInalGradeEntity {
+public class FinalGradeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fg_seq") private Long fgSeq;
     @Column(name = "fg_name") private String fgName;
