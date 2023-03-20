@@ -1,6 +1,7 @@
 package com.greenart.lms_service.entity;
 
-import com.greenart.lms_service.entity.member.MemberBasicEntity;
+import com.greenart.lms_service.entity.member.ProfessorEntity;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -25,7 +26,7 @@ public class LectureInfoEntity {
     @Column(name = "li_grade") private Integer liGrade;
     @Column(name = "li_evaluation_type") private Integer liEvaluation_type;
     @Column(name = "li_content") private String liContent;
-    @ManyToOne @JoinColumn(name = "li_mb_seq") private MemberBasicEntity professor;
+    @ManyToOne @JoinColumn(name = "li_mb_seq") private ProfessorEntity professor;
     // @Column(name = "li_si_seq") private Long liSiSeq;
     @OneToOne @JoinColumn(name = "li_si_seq") SemesterInfoEntity semesterInfoEntity;
 }

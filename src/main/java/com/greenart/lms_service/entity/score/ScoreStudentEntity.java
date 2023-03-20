@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "score_student")
 public class ScoreStudentEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sstu_seq") private Long sStuSeq;
+    @Column(name = "sstu_seq") private Long sstuSeq;
     @ManyToOne @JoinColumn(name = "sstu_mas_seq") private ScoreMasterEntity scoreMaster;
     @ManyToOne @JoinColumn(name = "sstu_mb_seq") private StudentEntity student;
-    @Column(name = "sstu_score") private Double sStuScore;
+    @Column(name = "sstu_score") private Integer sstuScore;
 }

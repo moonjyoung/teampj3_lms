@@ -12,5 +12,5 @@ public class ScoreStuResponseVO {
     @Schema(description = "학생 이름", example = "강백호")
     private String name;
     @Schema(description = "점수", example = "90")
-    private Double score;
+    private Integer score;
 }
