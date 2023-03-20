@@ -128,56 +128,12 @@ class AttendServiceApplicationTests {
             resultList.add(attMas);
         }
         System.out.println(resultList);
-        // for (ClassRegisterEntity data : classRegisterRepository.findByLectureInfo(lecture)) {
-        //     AttendResponseVO attMas = new AttendResponseVO();
-        //     attMas.setSeq(data.getStudent().getMbSeq());
-        //     attMas.setName(data.getStudent().getMbName());
-        //     for (AttendInfoMasterEntity data2 : attendInfoMasterRepository.findByLecture(lecture)) {
-        //         List<AttendStuResponseVO> attStuList = new ArrayList<>();
-        //         // LocalDate date = null; 
-        //         String status = "";
-        //         AttendStuResponseVO attStu = new AttendStuResponseVO();
-        //         for (AttendInfoStudentEntity data3 : data2.getAstuEntityList()) {
-        //             if (data3.getAstuStatus()==null) status = "";
-        //             else if (data3.getAstuStatus()==1) status = "O";
-        //             else if (data3.getAstuStatus()==0) status = "X";
-        //             attStu.setDate(data2.getAmasDate());
-        //             attStu.setStatus(status);
-        //             attStuList.add(attStu);
-        //         }
-
-        //         attMas.setList(attStuList);
-        //     }
-        //     System.out.println(attMas.toString());
-        // }
     }
 
-    // @Test // 출결일 중 전체 학생의 하루의 출석/결석 상태 일괄 변경
-    // void patchAllAttendDay() {
-    //     Integer status = 1;
-    //     String strDate = "2023-02-28";
-    //     LocalDate date = LocalDate.parse(strDate, DateTimeFormatter.ISO_DATE);
-    //     LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
-    //     AttendInfoMasterEntity data = attendInfoMasterRepository.findByLectureAndAmasDate(lecture, date);
-    //     AttendResponseVO attMas = new AttendResponseVO();
-    //     attMas.setDate(data.getAmasDate().toString());
-    //     List<AttendStuResponseVO> attStuList = new ArrayList<>();
-    //     for (AttendInfoStudentEntity data2 : attendInfoStudentRepository.findByAttendInfoMaster(data)) {
-    //         AttendStuResponseVO attStu = new AttendStuResponseVO();
-    //         attStu.setName(data2.getStudent().getMbName());
-    //         if (status==1) {
-    //             attStu.setStatus("O");
-    //         }
-    //         else if (status==0) {
-    //             attStu.setStatus("X");
-    //         }
-    //         attStuList.add(attStu);
-    //         data2.ChangeStatus(status);
-    //         attendInfoStudentRepository.save(data2);
-    //     }
-    //     attMas.setList(attStuList);
-    //     System.out.println(attMas.toString());
-    // }
+    @Test // 출결일 중 전체 학생의 하루의 출석/결석 상태 일괄 변경
+    void patchAllAttendDay() {
+        
+    }
 
     // @Test // 출결일 중 한 학생의 하루의 출석/결석 상태 변경
     // void patchStuAttendDay() {

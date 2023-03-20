@@ -1,7 +1,7 @@
 package com.greenart.lms_service.entity;
 
-import com.greenart.lms_service.entity.member.MemberBasicEntity;
 import com.greenart.lms_service.entity.member.ProfessorEntity;
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
