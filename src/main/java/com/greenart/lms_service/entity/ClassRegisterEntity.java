@@ -1,6 +1,6 @@
 package com.greenart.lms_service.entity;
 
-import com.greenart.lms_service.entity.member.MemberBasicEntity;
+import com.greenart.lms_service.entity.member.StudentEntity;
 import com.greenart.lms_service.entity.score.FInalGradeEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -20,10 +20,7 @@ import lombok.NoArgsConstructor;
 public class ClassRegisterEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cr_seq") private Long crSeq;
-    @ManyToOne
-    @JoinColumn(name = "cr_li_seq") private LectureInfoEntity lectureInfo;
-
-    @ManyToOne @JoinColumn(name = "cr_mb_seq") private MemberBasicEntity student;
-    @OneToOne
-    @JoinColumn(name = "cr_fg_seq") private FInalGradeEntity finalGrade;
+    @ManyToOne @JoinColumn(name = "cr_li_seq") private LectureInfoEntity lectureInfo;
+    @ManyToOne @JoinColumn(name = "cr_mb_seq") private StudentEntity student;
+    @OneToOne @JoinColumn(name = "cr_fg_seq") private FInalGradeEntity finalGrade;
 }

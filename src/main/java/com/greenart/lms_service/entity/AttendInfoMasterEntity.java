@@ -15,12 +15,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
-@Table(name = "attend_info_master")
 @Entity
+@Table(name = "attend_info_master")
 public class AttendInfoMasterEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "amas_seq") private Long aMasSeq;
-    @Column(name = "amas_date") private LocalDate aMasDate;
-    @ManyToOne
-    @JoinColumn(name = "amas_li_seq") private LectureInfoEntity lecture;
+    @Column(name = "amas_seq") private Long amasSeq;
+    @Column(name = "amas_date") private LocalDate amasDate;
+    @Column(name = "amas_li_seq") private Long amasLiSeq;
+    @ManyToOne @JoinColumn(name = "amas_li_seq", insertable = false, updatable = false) private LectureInfoEntity lecture;
+
+    public AttendInfoMasterEntity(LocalDate amasDate, Long amasLiSeq) {
+        this.amasDate = amasDate;
+        this.amasLiSeq = amasLiSeq;
+    }
 }

@@ -13,6 +13,9 @@ public class LectureInfoService {
     private final LectureInfoRepository liRepo;
 
     public AllLectureResponse showLecList() {
-        return liRepo.findAll();
+        
+        
+        
+        return null;
     }
 }
