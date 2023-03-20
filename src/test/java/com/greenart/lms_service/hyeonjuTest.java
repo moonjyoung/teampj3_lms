@@ -9,12 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.greenart.lms_service.entity.ClassRegisterEntity;
 import com.greenart.lms_service.entity.LectureInfoEntity;
-import com.greenart.lms_service.entity.member.StudentEntity;
 import com.greenart.lms_service.repository.ClassRegisterRepository;
 import com.greenart.lms_service.repository.LectureInfoRepository;
 import com.greenart.lms_service.repository.member.StudentRepository;
 import com.greenart.lms_service.service.LectureStudentService;
-import com.greenart.lms_service.vo.LectureStudentListVO;
 
 @SpringBootTest
 class hyeonjuTest {
