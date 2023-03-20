@@ -239,8 +239,8 @@ class AttendServiceApplicationTests {
                 ScoreStuResponseVO sstuResponse = new ScoreStuResponseVO();
                 ScoreStudentEntity scoreStu = scoreStudentRepository.findByScoreMasterAndStudent(data, data2);
                 sstuResponse.setSstuSeq(data2.getMbSeq());
-                sstuResponse.setSstuName(data2.getMbName());
-                sstuResponse.setSstuScore(scoreStu.getSStuScore());
+                sstuResponse.setName(data2.getMbName());
+                sstuResponse.setScore(scoreStu.getSStuScore());
                 sstuList.add(sstuResponse);
             }
             result.setSmasSeq(data.getSmasSeq());

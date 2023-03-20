@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.greenart.lms_service.entity.ClassRegisterEntity;
+import com.greenart.lms_service.entity.LectureInfoEntity;
+import com.greenart.lms_service.entity.member.StudentEntity;
 
 public interface ClassRegisterRepository extends JpaRepository<ClassRegisterEntity, Long> {
     // @Query(value = "select cr_li_seq from class_register", nativeQuery = true)
