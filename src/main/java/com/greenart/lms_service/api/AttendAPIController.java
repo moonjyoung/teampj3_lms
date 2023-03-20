@@ -57,9 +57,9 @@ public class AttendAPIController {
         @PathVariable Long liSeq,
         @RequestBody AttendAllDayRequestVO data
     ) {
-        Integer status = data.getStatus();
+        Integer status = data.getAStatus();
         if (status!=null && status!=1 && status!=0) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
-        if (data.getDate()==null) throw new CustomException("강의일을123123 확인해주세요.");
+        if (data.getDate()==null) throw new CustomException("강의일을 확인해주세요.");
 
         return new ResponseEntity<>(attendService.patchAttendAll(liSeq, data), HttpStatus.ACCEPTED);
     }
