@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.lms_service.service.LectureStudentService;
+import com.greenart.lms_service.vo.lectureStudent.LectureStudentDAO;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDaoVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "내 강의 수강생 정보조회", description = "내 강의 수강생 정보조회")
 @RestController
 @RequestMapping("/api/lec")
-// http://localhost:8888/api/{proSeq}/lec/{liSeq}/stu-list
+// http://localhost:8520/api/lec/{crLiSeq}
 @RequiredArgsConstructor
 public class LectureStudentAPIController {
     private final LectureStudentService lecStuService;
@@ -31,5 +32,11 @@ public class LectureStudentAPIController {
         @Parameter(description = "강의번호 ex crLiSeq:1")
         @PathVariable Long crLiSeq) {
         return new ResponseEntity<>(lecStuService.getLectureStudentList(crLiSeq), HttpStatus.OK);
+    }
+
+    // 내 강의 수강생 검색
+    @GetMapping("/{crLiSeq}/search/{stuName}")
+    public ResponseEntity<List<LectureStudentDaoVO>> getSearchLectureStudent(@PathVariable Long crLiSeq, @PathVariable String stuName) {
+        return new ResponseEntity<>(lecStuService.searchLectureStudent(crLiSeq, stuName), HttpStatus.ACCEPTED);
     }
 }
