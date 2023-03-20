@@ -1,4 +1,4 @@
-package com.greenart.lms_service.vo;
+package com.greenart.lms_service.vo.lectureStudent;
 
 import java.util.ArrayList;
 import java.util.List;

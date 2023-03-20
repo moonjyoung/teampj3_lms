@@ -10,19 +10,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.lms_service.service.LectureStudentService;
-import com.greenart.lms_service.vo.LectureStudentListVO;
+import com.greenart.lms_service.vo.lectureStudent.LectureStudentDaoVO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-
+@Tag(name = "내 강의 수강생 정보조회", description = "내 강의 수강생 정보조회")
 @RestController
-@RequestMapping("/api/{proSeq}/lec")
+@RequestMapping("/api/lec")
 // http://localhost:8888/api/{proSeq}/lec/{liSeq}/stu-list
 @RequiredArgsConstructor
 public class LectureStudentAPIController {
     private final LectureStudentService lecStuService;
 
-    @GetMapping("/{liSeq}/stu-list")
-    public ResponseEntity<List<LectureStudentListVO>> getlectStuList(@PathVariable Long liSeq) {
-        return new ResponseEntity<List<LectureStudentListVO>>(lecStuService.lectureStudentList(liSeq), HttpStatus.OK);
+    // 내 강의 수강생 조회
+    @Operation(summary = "수강생 조회", description = "crLiSeq 강의번호")
+    @GetMapping("/{crLiSeq}")
+    public ResponseEntity<List<LectureStudentDaoVO>> getlectStuList(
+        @Parameter(description = "강의번호 ex crLiSeq:1")
+        @PathVariable Long crLiSeq) {
+        return new ResponseEntity<>(lecStuService.getLectureStudentList(crLiSeq), HttpStatus.OK);
     }
 }

@@ -1,4 +1,4 @@
-package com.greenart.lms_service.vo;
+package com.greenart.lms_service.vo.lectureStudent;
 
 import com.greenart.lms_service.entity.ClassRegisterEntity;
 
