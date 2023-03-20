@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class BasicResponse {
-    private Boolean status;
-    private String message;
+    protected Boolean status;
+    protected String message;
 
     public BasicResponse() {}
     public BasicResponse(Boolean status, String message) {
