@@ -23,6 +23,7 @@ public class LectureStudentService {
     // 교수번호(P타입-repo)- (수강신청)강의entity-학생mb_entity(S타입)-stu_entity(전공명) 실패
     // view로 만들어서_view를 담는 vo를 만들어서 필요한 정보만 api명세서 대로 만듬
     // seq, 학번 , 이름, 학년, 전공명
+    // 내강의 수강생 조회
     public List<LectureStudentDaoVO> getLectureStudentList(Long crLiSeq) {
         LectureInfoEntity entity = lectureInfoRepository.findById(crLiSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
         Long proSeq = entity.getProfessor().getMbSeq();
@@ -44,6 +45,25 @@ public class LectureStudentService {
             // vo.setMessage("성공");
             daoVO.add(vo);
         }
+        return daoVO;
+    }
+
+    // 내강의 수강생 검색
+    public List<LectureStudentDaoVO> searchLectureStudent(Long crLiSeq, String stuName) {
+        List<LectureStudentDAO> dao = lecDaoRepo.findByCrLiSeqAndStuNameContains(crLiSeq,stuName);
+        List<LectureStudentDaoVO> daoVO = new ArrayList<>();
+
+        for(int i=0; i<dao.size(); i++) {
+            LectureStudentDaoVO vo = LectureStudentDaoVO.builder()
+                .seq(dao.get(i).getStuSeq())
+                .stuName(dao.get(i).getStuName())
+                .stuId(dao.get(i).getMbId())
+                .stuSubject(dao.get(i).getStuSubject())
+                .stuGrade(dao.get(i).getStuGrade())
+                .build();
+            daoVO.add(vo);
+        }
+
         return daoVO;
     }
 }

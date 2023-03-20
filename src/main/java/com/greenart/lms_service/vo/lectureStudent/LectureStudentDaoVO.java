@@ -23,4 +23,12 @@ public class LectureStudentDaoVO {
     private String stuId;    // 학번
     private String stuSubject; // 학생전공
     private Integer stuGrade;  // 학년
+
+    public LectureStudentDaoVO(LectureStudentDAO lecStuDao) {
+        this.seq = lecStuDao.getStuSeq();
+        this.stuName = lecStuDao.getStuName();
+        this.stuId = lecStuDao.getMbId();
+        this.stuSubject = lecStuDao.getStuSubject();
+        this.stuGrade = lecStuDao.getStuGrade();
+    }
 }
