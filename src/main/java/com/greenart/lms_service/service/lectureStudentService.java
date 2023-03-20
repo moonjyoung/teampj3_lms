@@ -17,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class LectureStudentService {
-<<<<<<< HEAD
-    
-=======
     private final LecturestudentdaoRepository lecDaoRepo;
     private final LectureInfoRepository lectureInfoRepository;
 
@@ -49,6 +46,4 @@ public class LectureStudentService {
         }
         return daoVO;
     }
-
->>>>>>> hyeonju
 }

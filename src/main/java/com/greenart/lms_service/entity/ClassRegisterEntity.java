@@ -1,5 +1,7 @@
 package com.greenart.lms_service.entity;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.greenart.lms_service.entity.member.StudentEntity;
 import com.greenart.lms_service.entity.score.FInalGradeEntity;
 
