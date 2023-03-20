@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class LectureInfoService {
     private final LectureInfoRepository liRepo;
 
-    public AllLectureResponse showLecList() {
-        return liRepo.findAll();
-    }
+    // public AllLectureResponse showLecList() {
+    //     return liRepo.findAll();
+    // }
 }

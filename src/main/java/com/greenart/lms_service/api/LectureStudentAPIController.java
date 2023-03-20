@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class LectureStudentAPIController {
     private final LectureStudentService lecStuService;
 
-    @GetMapping("/{liSeq}/stu-list")
-    public ResponseEntity<List<LectureStudentListVO>> getlectStuList(@PathVariable Long liSeq) {
-        return new ResponseEntity<List<LectureStudentListVO>>(lecStuService.lectureStudentList(liSeq), HttpStatus.OK);
-    }
+    // @GetMapping("/{liSeq}/stu-list")
+    // public ResponseEntity<List<LectureStudentListVO>> getlectStuList(@PathVariable Long liSeq) {
+    //     return new ResponseEntity<List<LectureStudentListVO>>(lecStuService.lectureStudentList(liSeq), HttpStatus.OK);
+    // }
 }

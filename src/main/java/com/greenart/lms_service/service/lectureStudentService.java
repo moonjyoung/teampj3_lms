@@ -17,25 +17,5 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class LectureStudentService {
-    private final ClassRegisterRepository crRepo;
-    private final LectureInfoRepository lecRepo;
-    private final StudentRepository stuRepo;
-
-    // 교수번호(P타입-repo)- (수강신청)강의entity-학생mb_entity(S타입)-stu_entity(전공명)
-    // seq, 학번 , 이름, 학년, 전공명
-    public List<LectureStudentListVO> lectureStudentList(Long liSeq) {
-        LectureInfoEntity lecture = lecRepo.findById(liSeq).orElse(null);
-        List<ClassRegisterEntity> entity = crRepo.findByLectureInfo(lecture);
-
-        List<LectureStudentListVO> lectureVO = new ArrayList<>();
-
-        for(ClassRegisterEntity s : entity) {
-            LectureStudentListVO lecVO = new LectureStudentListVO(s);
-            List<ClassRegisterEntity> crList = crRepo.findByClassRegister(s);
-            lecVO.downVO(crList);
-            lectureVO.add(lecVO);;
-        }
-        return lectureVO;
-    }
-
+    
 }
