@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(StatisticsId.class)
+@IdClass(StatisticsId.class) // 유니크키 두개 클래스 하나 더 만듬
 @Entity(name = "lecturestudentdao")
-public class LectureStudentDAO implements Serializable{
+public class LectureStudentDAO implements Serializable{ // 유니크키 두개 클래스 상속
     @Column(name = "pro_seq") private Long proSeq;
     @Column(name = "pro") private String proName;
     @Column(name = "li_name") private String liName;

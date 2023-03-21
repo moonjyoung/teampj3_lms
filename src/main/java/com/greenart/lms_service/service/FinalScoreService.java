@@ -1,5 +1,11 @@
 package com.greenart.lms_service.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import com.greenart.lms_service.entity.ClassRegisterEntity;
 import com.greenart.lms_service.entity.LectureInfoEntity;
 import com.greenart.lms_service.entity.member.StudentEntity;
@@ -10,14 +16,16 @@ import com.greenart.lms_service.repository.member.StudentRepository;
 import com.greenart.lms_service.repository.score.FinalGradeRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
-import com.greenart.lms_service.vo.finalGrade.view.*;
-import com.greenart.lms_service.vo.finalGrade.vo.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
+import com.greenart.lms_service.vo.finalGrade.view.RankScore;
+import com.greenart.lms_service.vo.finalGrade.view.TotalMaxScore;
+import com.greenart.lms_service.vo.finalGrade.view.TotalScore;
+import com.greenart.lms_service.vo.finalGrade.view.ViewEntity;
+import com.greenart.lms_service.vo.finalGrade.view.ViewRepository;
+import com.greenart.lms_service.vo.finalGrade.vo.FinalScoreVO;
+import com.greenart.lms_service.vo.finalGrade.vo.InsertFinalScoreVO;
+import com.greenart.lms_service.vo.finalGrade.vo.MessageVO;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

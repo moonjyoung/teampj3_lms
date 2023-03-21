@@ -27,17 +27,22 @@ public class LectureStudentAPIController {
     private final LectureStudentService lecStuService;
 
     // 내 강의 수강생 조회
-    @Operation(summary = "수강생 조회", description = "crLiSeq 강의번호")
-    @GetMapping("/{crLiSeq}")
+    @Operation(summary = "수강생 조회", description = "liSeq 강의번호")
+    @GetMapping("/{liSeq}") // liSeq다 맞추기
     public ResponseEntity<List<LectureStudentDaoVO>> getlectStuList(
         @Parameter(description = "강의번호 ex crLiSeq:1")
-        @PathVariable Long crLiSeq) {
-        return new ResponseEntity<>(lecStuService.getLectureStudentList(crLiSeq), HttpStatus.OK);
+        @PathVariable Long liSeq) {
+        return new ResponseEntity<>(lecStuService.getLectureStudentList(liSeq), HttpStatus.OK);
     }
 
     // 내 강의 수강생 검색
-    @GetMapping("/{crLiSeq}/search/{stuName}")
-    public ResponseEntity<List<LectureStudentDaoVO>> getSearchLectureStudent(@PathVariable Long crLiSeq, @PathVariable String stuName) {
-        return new ResponseEntity<>(lecStuService.searchLectureStudent(crLiSeq, stuName), HttpStatus.ACCEPTED);
+    @Operation(summary = "수강생 검색", description = "liSeq 강의번호, stuName 학생이름, 검색")
+    @GetMapping("/{liSeq}/search/{stuName}")
+    public ResponseEntity<List<LectureStudentDaoVO>> getSearchLectureStudent(
+        @Parameter(description = "강의번호 ex liSeq:1")
+        @PathVariable Long liSeq,
+        @Parameter(description = "학생이름 ex stuName:강백호")
+        @PathVariable String stuName) {
+        return new ResponseEntity<>(lecStuService.searchLectureStudent(liSeq, stuName), HttpStatus.ACCEPTED);
     }
 }
