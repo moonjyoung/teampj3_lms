@@ -1,6 +1,5 @@
 package com.greenart.lms_service.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import com.greenart.lms_service.repository.LectureInfoRepository;
 import com.greenart.lms_service.repository.SemesterInfoRepository;
 import com.greenart.lms_service.repository.member.StudentRepository;
 import com.greenart.lms_service.vo.BasicResponse;
-import com.greenart.lms_service.vo.attend.AttendAllDayRequestVO;
+import com.greenart.lms_service.vo.attend.AttendRequestVO;
 import com.greenart.lms_service.vo.attend.AttendMasResponseVO;
 import com.greenart.lms_service.vo.attend.AttendResponseVO;
 import com.greenart.lms_service.vo.attend.AttendStuResponseVO;
@@ -72,28 +71,28 @@ public class AttendService {
         return result;
     }
 
-    public BasicResponse postAttendAll(Long liSeq, Long amasSeq, Integer status) {
+    public BasicResponse postAttendAll(Long liSeq, AttendRequestVO data) {
         LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
-        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(amasSeq).orElseThrow(() -> new CustomException("강의일 번호를 확인해주세요."));
+        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(data.getAmasSeq()).orElseThrow(() -> new CustomException("강의일 번호를 확인해주세요."));
         if (attendMas.getLecture()!=lecture) throw new CustomException("강의 정보와 강의일 정보가 맞지 않습니다.");
 
         for (AttendInfoStudentEntity attendStu : attendInfoStudentRepository.findByAttendInfoMaster(attendMas)) {
-            attendStu.ChangeStatus(status);
+            attendStu.ChangeStatus(data.getStatus());
             attendInfoStudentRepository.save(attendStu);
         }
 
         return new BasicResponse(true, "전체 변경 성공");
     }
 
-    public BasicResponse postAttend(Long liSeq, Long amasSeq, Integer status, Long mbSeq) {
+    public BasicResponse postAttend(Long liSeq, AttendRequestVO data, Long mbSeq) {
         LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
         StudentEntity student = studentRepository.findById(mbSeq).orElseThrow(() -> new CustomException("존재하지 않는 학생입니다."));
         ClassRegisterEntity classRegi = classRegisterRepository.findByLectureInfoAndStudent(lecture, student);
         if (classRegi==null) throw new CustomException("강의에 학생이 없습니다.");
-        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(amasSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의일 입니다."));
+        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(data.getAmasSeq()).orElseThrow(() -> new CustomException("존재하지 않는 강의일 입니다."));
         AttendInfoStudentEntity attendStu = attendInfoStudentRepository.findByAttendInfoMasterAndStudent(attendMas, student);
         if (attendStu==null) throw new CustomException("올바르지 않은 입력입니다.");
-        attendStu.ChangeStatus(status);
+        attendStu.ChangeStatus(data.getStatus());
         attendInfoStudentRepository.save(attendStu);
 
         return new BasicResponse(true, "변경 성공");

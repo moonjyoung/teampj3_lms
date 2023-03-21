@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class LectureInfoService {
-    private final LectureInfoRepository liRepo;
+    private final LectureInfoRepository lectureInfoRepository;
 
     public AllLectureResponse showLecList() {
         

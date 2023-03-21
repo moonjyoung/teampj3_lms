@@ -1,34 +1,24 @@
 package com.greenart.lms_service.api;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.greenart.lms_service.entity.AttendInfoMasterEntity;
-import com.greenart.lms_service.entity.AttendInfoStudentEntity;
-import com.greenart.lms_service.entity.LectureInfoEntity;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.service.AttendService;
 import com.greenart.lms_service.vo.BasicResponse;
-import com.greenart.lms_service.vo.attend.AttendAllDayRequestVO;
+import com.greenart.lms_service.vo.attend.AttendRequestVO;
 import com.greenart.lms_service.vo.attend.AttendResponseVO;
-import com.greenart.lms_service.vo.attend.AttendStuResponseVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -59,15 +49,15 @@ public class AttendAPIController {
             @ApiResponse(responseCode = "400", description = "false",
                 content = @Content(schema = @Schema(implementation = BasicResponse.class)))
         })
-    @PostMapping("/{liSeq}/{amasSeq}/{status}")
-    public ResponseEntity<BasicResponse> patchAllAttend(
+    @PostMapping("/{liSeq}")
+    public ResponseEntity<BasicResponse> postAttendAll(
         @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq,
-        @Parameter(description = "강의일 번호", example = "1") @PathVariable Long amasSeq,
-        @Parameter(description = "출결 여부 (0 : 결석, 1 : 출석)", example = "1")@PathVariable Integer status
+        @Parameter(description = "출석 정보 변경 RequestVO") @RequestBody AttendRequestVO data
     ) {
+        Integer status = data.getStatus();
         if (status==null || !(status==1 || status==0)) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
 
-        return new ResponseEntity<>(attendService.postAttendAll(liSeq, amasSeq, status), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(attendService.postAttendAll(liSeq, data), HttpStatus.ACCEPTED);
     }
 
     @Operation(summary = "학생 출결 정보 수정", description = "특정 수업일의 학생의 출결정보를 수정합니다.",
@@ -76,15 +66,15 @@ public class AttendAPIController {
             @ApiResponse(responseCode = "400", description = "false",
                 content = @Content(schema = @Schema(implementation = BasicResponse.class)))
         })
-    @PostMapping("/{liSeq}/{amasSeq}/{status}/{mbSeq}")
-    public ResponseEntity<BasicResponse> patchAttend(
+    @PostMapping("/{liSeq}/{mbSeq}")
+    public ResponseEntity<BasicResponse> postAttendAll(
         @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq,
-        @Parameter(description = "강의일 번호", example = "1") @PathVariable Long amasSeq,
-        @Parameter(description = "출결 여부 (0 : 결석, 1 : 출석)", example = "1")@PathVariable Integer status,
+        @Parameter(description = "출석 정보 변경 RequestVO") @RequestBody AttendRequestVO data,
         @Parameter(description = "학생 번호", example = "1") @PathVariable Long mbSeq
     ) {
+        Integer status = data.getStatus();
         if (status==null || !(status==1 || status==0)) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
         
-        return new ResponseEntity<>(attendService.postAttend(liSeq, amasSeq, status, mbSeq), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(attendService.postAttend(liSeq, data, mbSeq), HttpStatus.ACCEPTED);
     }
 }

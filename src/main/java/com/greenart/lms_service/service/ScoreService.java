@@ -20,6 +20,8 @@ import com.greenart.lms_service.repository.score.ScoreCateRepository;
 import com.greenart.lms_service.repository.score.ScoreMasterRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
+import com.greenart.lms_service.vo.BasicResponse;
+import com.greenart.lms_service.vo.score.RequestScoreVO;
 import com.greenart.lms_service.vo.score.ScoreMasResponseVO;
 import com.greenart.lms_service.vo.score.ScoreResponseVO;
 import com.greenart.lms_service.vo.score.ScoreStuResponseVO;
@@ -75,5 +77,16 @@ public class ScoreService {
         response.setStatus(true);
         response.setMessage("조회 성공");
         return response;
+    }
+
+    public BasicResponse postScore(Long liSeq, RequestScoreVO data) {
+        LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        ScoreStudentEntity scoreStu = scoreStudentRepository.findById(data.getSstuSeq()).orElseThrow(() -> new CustomException("존재하지 않는 평가입니다."));
+        if (scoreStu.getScoreMaster().getScoreStandard().getLectureInfo()!=lecture) throw new CustomException("올바르지 않은 입력입니다.");
+
+        scoreStu.ChangeScore(data.getScore());
+        scoreStudentRepository.save(scoreStu);
+
+        return new BasicResponse(true, "입력 완료");
     }
 }

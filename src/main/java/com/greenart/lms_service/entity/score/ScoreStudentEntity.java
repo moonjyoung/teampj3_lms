@@ -24,4 +24,8 @@ public class ScoreStudentEntity {
     @ManyToOne @JoinColumn(name = "sstu_mas_seq") private ScoreMasterEntity scoreMaster;
     @ManyToOne @JoinColumn(name = "sstu_mb_seq") private StudentEntity student;
     @Column(name = "sstu_score") private Integer sstuScore;
+
+    public void ChangeScore(Integer score) {
+        this.sstuScore = score;
+    }
 }
