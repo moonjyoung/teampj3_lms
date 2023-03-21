@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
 @Tag(name = "내 강의 수강생 정보조회", description = "내 강의 수강생 정보조회")
 @RestController
 @RequestMapping("/api/lec")
@@ -25,11 +26,11 @@ public class LectureStudentAPIController {
     private final LectureStudentService lecStuService;
 
     // 내 강의 수강생 조회
-    @Operation(summary = "수강생 조회", description = "crLiSeq 강의번호")
-    @GetMapping("/{crLiSeq}")
-    public ResponseEntity<List<LectureStudentDaoVO>> getlectStuList(
-        @Parameter(description = "강의번호 ex crLiSeq:1")
-        @PathVariable Long crLiSeq) {
-        return new ResponseEntity<>(lecStuService.getLectureStudentList(crLiSeq), HttpStatus.OK);
-    }
+    // @Operation(summary = "수강생 조회", description = "crLiSeq 강의번호")
+    // @GetMapping("/{crLiSeq}")
+    // public ResponseEntity<List<LectureStudentDaoVO>> getlectStuList(
+    //     @Parameter(description = "강의번호 ex crLiSeq:1")
+    //     @PathVariable Long crLiSeq) {
+    //     return new ResponseEntity<>(lecStuService.getLectureStudentList(crLiSeq), HttpStatus.OK);
+    // }
 }
