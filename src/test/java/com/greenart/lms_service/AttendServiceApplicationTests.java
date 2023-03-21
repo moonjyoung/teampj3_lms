@@ -35,6 +35,7 @@ import com.greenart.lms_service.repository.score.ScoreCateRepository;
 import com.greenart.lms_service.repository.score.ScoreMasterRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
+import com.greenart.lms_service.vo.attend.AttendMasResponseVO;
 import com.greenart.lms_service.vo.attend.AttendResponseVO;
 import com.greenart.lms_service.vo.attend.AttendStuResponseVO;
 import com.greenart.lms_service.vo.score.ScoreMasResponseVO;
@@ -108,9 +109,10 @@ class AttendServiceApplicationTests {
         for (ClassRegisterEntity data : classRegisterRepository.findByLectureInfo(lecture)) {
             stuList.add(data.getStudent());
         }
-        List<AttendResponseVO> resultList = new ArrayList<>();
+        AttendResponseVO result = new AttendResponseVO();
+        List<AttendMasResponseVO> attMasList = new ArrayList<>();
         for (StudentEntity stuData : stuList) {
-            AttendResponseVO attMas = new AttendResponseVO();
+            AttendMasResponseVO attMas = new AttendMasResponseVO();
             List<AttendStuResponseVO> attStuList = new ArrayList<>();
             for (AttendInfoStudentEntity data : attendInfoStudentRepository.findByStudent(stuData)) {
                 AttendStuResponseVO attStu = new AttendStuResponseVO();
@@ -118,6 +120,7 @@ class AttendServiceApplicationTests {
                 if (data.getAstuStatus()==null) status = "";
                 else if (data.getAstuStatus()==1) status = "O";
                 else if (data.getAstuStatus()==0) status = "X";
+                attStu.setAmasSeq(data.getAttendInfoMaster().getAmasSeq());
                 attStu.setDate(data.getAttendInfoMaster().getAmasDate());
                 attStu.setStatus(status);
                 attStuList.add(attStu);
@@ -125,14 +128,24 @@ class AttendServiceApplicationTests {
             attMas.setMbSeq(stuData.getMbSeq());
             attMas.setName(stuData.getMbName());
             attMas.setList(attStuList);
-            resultList.add(attMas);
+            attMasList.add(attMas);
         }
-        System.out.println(resultList);
+        result.setStatus(true);
+        result.setMessage("조회 성공");
+        result.setList(attMasList);
+        System.out.println(result);
     }
 
     @Test // 출결일 중 전체 학생의 하루의 출석/결석 상태 일괄 변경
+    @Transactional
     void patchAllAttendDay() {
-        
+        LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(1L).orElseThrow(() -> new CustomException("강의일 번호를 확인해주세요."));
+        if (attendMas.getLecture()!=lecture) throw new CustomException("강의 정보와 강의일 정보가 맞지 않습니다.");
+        for (AttendInfoStudentEntity attendStu : attendInfoStudentRepository.findByAttendInfoMaster(attendMas)) {
+            attendStu.ChangeStatus(1);
+            attendInfoStudentRepository.save(attendStu);
+        }
     }
 
     // @Test // 출결일 중 한 학생의 하루의 출석/결석 상태 변경

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,36 +40,51 @@ import lombok.RequiredArgsConstructor;
 public class AttendAPIController {
     private final AttendService attendService;
 
-    @Operation(summary = "출결 정보 조회", description = "해당 강의의 모든 수업일/학생 출결정보를 조회합니다.",
+    @Operation(summary = "강의의 전체 출결 정보 조회", description = "해당 강의의 모든 수업일/학생 출결정보를 조회합니다.",
         responses = {
             @ApiResponse(responseCode = "200", description = "true"),
             @ApiResponse(responseCode = "400", description = "false",
                 content = @Content(schema = @Schema(implementation = BasicResponse.class)))
         })
     @GetMapping("/{liSeq}")
-    public ResponseEntity< List<AttendResponseVO> > getAttendDay(
+    public ResponseEntity<AttendResponseVO> getAttendDay(
         @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq
     ) {
         return new ResponseEntity<>(attendService.getAttendDay(liSeq), HttpStatus.OK);
     }
 
-    @PostMapping("/{liSeq}")
-    public ResponseEntity<BasicResponse> postAllAttend(
-        @PathVariable Long liSeq,
-        @RequestBody AttendAllDayRequestVO data
+    @Operation(summary = "전체 출결 정보 수정", description = "특정 수업일의 모든 학생의 출결정보를 수정합니다.",
+        responses = {
+            @ApiResponse(responseCode = "202", description = "true"),
+            @ApiResponse(responseCode = "400", description = "false",
+                content = @Content(schema = @Schema(implementation = BasicResponse.class)))
+        })
+    @PostMapping("/{liSeq}/{amasSeq}/{status}")
+    public ResponseEntity<BasicResponse> patchAllAttend(
+        @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq,
+        @Parameter(description = "강의일 번호", example = "1") @PathVariable Long amasSeq,
+        @Parameter(description = "출결 여부 (0 : 결석, 1 : 출석)", example = "1")@PathVariable Integer status
     ) {
-        Integer status = data.getAStatus();
-        if (status!=null && status!=1 && status!=0) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
-        if (data.getDate()==null) throw new CustomException("강의일을 확인해주세요.");
+        if (status==null || !(status==1 || status==0)) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
 
-        return new ResponseEntity<>(attendService.patchAttendAll(liSeq, data), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(attendService.postAttendAll(liSeq, amasSeq, status), HttpStatus.ACCEPTED);
     }
 
-    @PatchMapping("/{liSeq}/asdf")
+    @Operation(summary = "학생 출결 정보 수정", description = "특정 수업일의 학생의 출결정보를 수정합니다.",
+        responses = {
+            @ApiResponse(responseCode = "202", description = "true"),
+            @ApiResponse(responseCode = "400", description = "false",
+                content = @Content(schema = @Schema(implementation = BasicResponse.class)))
+        })
+    @PostMapping("/{liSeq}/{amasSeq}/{status}/{mbSeq}")
     public ResponseEntity<BasicResponse> patchAttend(
-        @PathVariable Long liSeq
+        @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq,
+        @Parameter(description = "강의일 번호", example = "1") @PathVariable Long amasSeq,
+        @Parameter(description = "출결 여부 (0 : 결석, 1 : 출석)", example = "1")@PathVariable Integer status,
+        @Parameter(description = "학생 번호", example = "1") @PathVariable Long mbSeq
     ) {
-        BasicResponse response = new BasicResponse(true, "변경 성공");
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        if (status==null || !(status==1 || status==0)) throw new CustomException("유효하지 않은 상태값입니다.(0:결석, 1:출석)");
+        
+        return new ResponseEntity<>(attendService.postAttend(liSeq, amasSeq, status, mbSeq), HttpStatus.ACCEPTED);
     }
 }

@@ -5,12 +5,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.greenart.lms_service.entity.ClassRegisterEntity;
 import com.greenart.lms_service.entity.LectureInfoEntity;
 import com.greenart.lms_service.exception.CustomException;
+import com.greenart.lms_service.repository.ClassRegisterRepository;
 import com.greenart.lms_service.repository.LectureInfoRepository;
 import com.greenart.lms_service.repository.LecturestudentdaoRepository;
+import com.greenart.lms_service.repository.member.StudentRepository;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDAO;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDaoVO;
+import com.greenart.lms_service.vo.lectureStudent.LectureStudentListVO;
 
 import lombok.RequiredArgsConstructor;
 

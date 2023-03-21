@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
 @Tag(name = "내 강의 수강생 정보조회", description = "내 강의 수강생 정보조회")
 @RestController
 @RequestMapping("/api/lec")
