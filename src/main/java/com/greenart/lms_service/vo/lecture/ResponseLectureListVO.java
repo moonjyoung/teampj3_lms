@@ -17,6 +17,4 @@ public class ResponseLectureListVO {
     private String liClass;
     @Schema(description = "학점", example = "3")
     private Integer liGrade;
-    @Schema(description = "강의 시간")
-    private List<ResponseLectureTimeVO> timeList;
 }

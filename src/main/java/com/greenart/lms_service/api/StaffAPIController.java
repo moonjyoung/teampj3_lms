@@ -1,5 +1,7 @@
 package com.greenart.lms_service.api;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.lms_service.service.StaffService;
 import com.greenart.lms_service.vo.BasicResponse;
+import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,10 +35,16 @@ public class StaffAPIController {
             @ApiResponse(responseCode = "400", description = "false",
                 content = @Content(schema = @Schema(implementation = BasicResponse.class)))
         })
-    @GetMapping("/{liSeq}")
+    @GetMapping("/lectures/{liSeq}")
     public ResponseEntity<MaxScoreResponseVO> getLecMaxScore(
         @Parameter(description = "강의 번호", example = "1") @PathVariable Long liSeq
     ) {
         return new ResponseEntity<>(staffService.getLectureScoreMax(liSeq), HttpStatus.OK);
+    }
+
+    @Operation(summary = "전체 강의 성적기준 정보 조회", description = "전체 강의의 성적기준(만점) 정보를 조회합니다.")
+    @GetMapping("/lectures")
+    public ResponseEntity<MaxScoreBasicResponseVO> getLecMaxScoreAll() {
+        return new ResponseEntity<>(staffService.getLectureScoreMaxAll(), HttpStatus.OK);
     }
 }

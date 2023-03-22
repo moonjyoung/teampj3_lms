@@ -16,7 +16,6 @@ import com.greenart.lms_service.repository.member.ProfessorRepository;
 import com.greenart.lms_service.utils.ConvertDayOfWeek;
 import com.greenart.lms_service.vo.lecture.LectureResponseVO;
 import com.greenart.lms_service.vo.lecture.ResponseLectureListVO;
-import com.greenart.lms_service.vo.lecture.ResponseLectureTimeVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,22 +37,10 @@ public class ProfessorService {
             vo.setLiName(data.getLiName());
             vo.setLiClass(data.getLiClass());
             vo.setLiGrade(data.getLiGrade());
-            List<ResponseLectureTimeVO> timeList = new ArrayList<>();
-            for (ClassDateEntity data2 : classDateRepository.findByLecture(data)) {
-                ResponseLectureTimeVO vo2 = new ResponseLectureTimeVO();
-                vo2.setDowInt(data2.getCdWeek());
-                vo2.setDwoStr(ConvertDayOfWeek.convertDayOfWeek(data2.getCdWeek()));
-                vo2.setStart(data2.getCdStart());
-                vo2.setEnd(data2.getCdLast());
-                timeList.add(vo2);
-            }
-            vo.setTimeList(timeList);
             listVO.add(vo);
         }
         result.setStatus(true);
         result.setMessage("조회 성공");
-        result.setMbSeq(mbSeq);
-        result.setName(professor.getMbName());
         result.setList(listVO);
 
         return result;
