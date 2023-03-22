@@ -17,6 +17,8 @@ public class MemberLoginResponseVO extends BasicResponse {
     private String id;
     @Schema(description = "회원 이름", example = "강백호")
     private String name;
+    @Schema(description = "회원 타입", example = "student")
+    private String type;
     @Schema(description = "토큰")
     private TokenVO token;
 
@@ -24,16 +26,19 @@ public class MemberLoginResponseVO extends BasicResponse {
         this.seq = student.getMbSeq();
         this.id = student.getMbId();
         this.name = student.getMbName();
+        this.type = "student";
     }
     public MemberLoginResponseVO(ProfessorEntity professor) {
         this.seq = professor.getMbSeq();
         this.id = professor.getMbId();
         this.name = professor.getMbName();
+        this.type = "professor";
     }
     public MemberLoginResponseVO(StaffEntity staff) {
         this.seq = staff.getMbSeq();
         this.id = staff.getMbId();
         this.name = staff.getMbName();
+        this.type = "staff";
     }
     public MemberLoginResponseVO() {}
 }
