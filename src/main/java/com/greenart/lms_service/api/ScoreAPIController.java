@@ -1,5 +1,7 @@
 package com.greenart.lms_service.api;
 
+import com.greenart.lms_service.vo.finalGrade.vo.MessageVO;
+import com.greenart.lms_service.vo.score.ScoreInsertVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,10 +46,8 @@ public class ScoreAPIController {
     }
 
     @PostMapping("/{liSeq}")
-    public ResponseEntity<BasicResponse> postScore(
-        @PathVariable Long liSeq,
-        @RequestBody RequestScoreVO data
-    ) {
-        return new ResponseEntity<>(scoreService.postScore(liSeq, data), HttpStatus.OK);
+    public ResponseEntity<MessageVO> postScore(@PathVariable Long liSeq, @RequestBody ScoreInsertVO data) {
+        MessageVO response = scoreService.insertScore(liSeq, data);
+        return new ResponseEntity<>(response, response.getCode());
     }
 }
