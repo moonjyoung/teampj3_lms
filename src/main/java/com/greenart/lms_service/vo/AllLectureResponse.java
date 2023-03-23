@@ -34,6 +34,6 @@ public class AllLectureResponse {
         this.assignmentRaio = smEntity.getScoreStandard().getSsScoreMax();
         this.middleRatio = smEntity.getScoreStandard().getSsScoreMax();
         this.finalRatio = smEntity.getScoreStandard().getSsScoreMax();
-        this.liEvaluationType = entity.getLiEvaluation_type();
+        this.liEvaluationType = entity.getLiEvaluationType();
     }
 }

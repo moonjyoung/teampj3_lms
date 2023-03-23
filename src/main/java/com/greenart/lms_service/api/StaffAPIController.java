@@ -1,11 +1,15 @@
 package com.greenart.lms_service.api;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +17,7 @@ import com.greenart.lms_service.service.StaffService;
 import com.greenart.lms_service.vo.BasicResponse;
 import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
+import com.greenart.lms_service.vo.score.UpdateEvaluationTypeVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,4 +52,19 @@ public class StaffAPIController {
     public ResponseEntity<MaxScoreBasicResponseVO> getLecMaxScoreAll() {
         return new ResponseEntity<>(staffService.getLectureScoreMaxAll(), HttpStatus.OK);
     }
+
+    @Operation(summary = "강의별 평가방식 정보 수정", description = "해당 강의의 평가방식 정보를 수정합니다. 평가방식(1 상대 / 2 절대 / 3 P)")
+    @PostMapping("/lectures/{liSeq}")
+    public ResponseEntity<Object> postLecLiEvaluationType(
+        @Parameter(description = "강의 번호", example = "1")
+        @PathVariable Long liSeq, 
+        @RequestBody UpdateEvaluationTypeVO data
+    ) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        UpdateEvaluationTypeVO updateEvaluationType = staffService.updateEvaluationType(liSeq, data);
+        map.put("message", "평가방식 수정완료");
+        map.put("data", updateEvaluationType);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
 }

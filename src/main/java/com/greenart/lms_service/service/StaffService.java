@@ -14,6 +14,7 @@ import com.greenart.lms_service.vo.score.MaxScoreAllResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreListResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
+import com.greenart.lms_service.vo.score.UpdateEvaluationTypeVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,8 +43,8 @@ public class StaffService {
         result.setCode(lecture.getLiCode());
         
         String evaluation = "";
-        if (lecture.getLiEvaluation_type()==1) evaluation = "상대평가";
-        else if (lecture.getLiEvaluation_type()==2) evaluation = "절대평가";
+        if (lecture.getLiEvaluationType()==1) evaluation = "상대평가";
+        else if (lecture.getLiEvaluationType()==2) evaluation = "절대평가";
         result.setEvaluation(evaluation);
 
         result.setName(lecture.getLiName());
@@ -71,8 +72,8 @@ public class StaffService {
             result.setCode(lecture.getLiCode());
 
             String evaluation = "";
-            if (lecture.getLiEvaluation_type()==1) evaluation = "상대평가";
-            else if (lecture.getLiEvaluation_type()==2) evaluation = "절대평가";
+            if (lecture.getLiEvaluationType()==1) evaluation = "상대평가";
+            else if (lecture.getLiEvaluationType()==2) evaluation = "절대평가";
             result.setEvaluation(evaluation);
     
             result.setName(lecture.getLiName());
@@ -87,5 +88,12 @@ public class StaffService {
         response.setList(lecList);
 
         return response;
+    }
+
+    public UpdateEvaluationTypeVO updateEvaluationType(Long liSeq, UpdateEvaluationTypeVO data) {
+        LectureInfoEntity updateType = lectureInfoRepository.findById(liSeq).orElseThrow();
+        updateType.setEvaluationType(data);
+        lectureInfoRepository.save(updateType);
+        return data;
     }
 }
