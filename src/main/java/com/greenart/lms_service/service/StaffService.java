@@ -15,6 +15,7 @@ import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreListResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
 import com.greenart.lms_service.vo.score.UpdateEvaluationTypeVO;
+import com.greenart.lms_service.vo.score.UpdateMiddleVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -95,5 +96,9 @@ public class StaffService {
         updateType.setEvaluationType(data);
         lectureInfoRepository.save(updateType);
         return data;
+    }
+    public UpdateMiddleVO updateMiddleMax(Long liSeq, UpdateMiddleVO data) {
+        ScoreStandardEntity updateMiddle = scoreStandardRepository.findByLectureInfoAndScoreCate(liSeq, data);
+        
     }
 }

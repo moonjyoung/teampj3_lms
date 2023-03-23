@@ -67,4 +67,18 @@ public class StaffAPIController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
+    @Operation(summary = "강의별 중간고사 만점 수정", description = "해당 강의의 중간고사 만점을 수정합니다.")
+    @PostMapping("/lectures/middle/{liSeq}")
+    public ResponseEntity<Object> postMiddle(
+        @Parameter(description = "강의 번호", example = "1")
+        @PathVariable Long liSeq, 
+        @RequestBody UpdateEvaluationTypeVO data
+    ) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        UpdateEvaluationTypeVO updateEvaluationType = staffService.updateEvaluationType(liSeq, data);
+        map.put("message", "평가방식 수정완료");
+        map.put("data", updateEvaluationType);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
 }
