@@ -3,6 +3,9 @@ package com.greenart.lms_service.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.greenart.lms_service.vo.finalGrade.vo.MessageVO;
+import com.greenart.lms_service.vo.score.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.greenart.lms_service.entity.ClassRegisterEntity;
@@ -21,10 +24,6 @@ import com.greenart.lms_service.repository.score.ScoreMasterRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
 import com.greenart.lms_service.vo.BasicResponse;
-import com.greenart.lms_service.vo.score.RequestScoreVO;
-import com.greenart.lms_service.vo.score.ScoreMasResponseVO;
-import com.greenart.lms_service.vo.score.ScoreResponseVO;
-import com.greenart.lms_service.vo.score.ScoreStuResponseVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -79,14 +78,30 @@ public class ScoreService {
         return response;
     }
 
-    public BasicResponse postScore(Long liSeq, RequestScoreVO data) {
-        LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
-        ScoreStudentEntity scoreStu = scoreStudentRepository.findById(data.getSstuSeq()).orElseThrow(() -> new CustomException("존재하지 않는 평가입니다."));
-        if (scoreStu.getScoreMaster().getScoreStandard().getLectureInfo()!=lecture) throw new CustomException("올바르지 않은 입력입니다.");
-
-        scoreStu.ChangeScore(data.getScore());
-        scoreStudentRepository.save(scoreStu);
-
-        return new BasicResponse(true, "입력 완료");
+    public MessageVO insertScore(Long liSeq, ScoreInsertVO data) {
+        ScoreMasterEntity scoreMaster = scoreMasterRepository.findById(data.getMasSeq()).orElseThrow(() -> new NullPointerException("존재하지 않는 평가 번호"));
+        StudentEntity student = studentRepository.findById(data.getMbSeq()).orElseThrow(() -> new NullPointerException("존재하지 않는 학생 번호"));
+        LectureInfoEntity lectureInfo = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new NullPointerException("존재하지 않는 강의 번호"));
+        if(scoreMaster.getScoreStandard().getLectureInfo() != lectureInfo) {
+            return MessageVO.builder()
+                    .status(false)
+                    .message("해당 강의와 맞지 않는 평가 번호입니다.")
+                    .code(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        if(data.getScore() > scoreMaster.getSmasScore()) {
+            return MessageVO.builder()
+                    .status(false)
+                    .message("평가 점수는 최댓값을 넘을 수 없습니다. "+scoreMaster.getSmasName()+"의 최댓값 : "+scoreMaster.getSmasScore())
+                    .code(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        ScoreStudentEntity score = new ScoreStudentEntity(null, scoreMaster, student, data.getScore());
+        scoreStudentRepository.save(score);
+        return MessageVO.builder()
+                .status(true)
+                .message(student.getMbName()+"( "+student.getMbId()+" ) 학생의 "+scoreMaster.getSmasName()+" 점수 : "+data.getScore())
+                .code(HttpStatus.OK)
+                .build();
     }
 }
