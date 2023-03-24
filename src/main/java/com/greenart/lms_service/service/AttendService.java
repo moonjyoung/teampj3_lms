@@ -51,13 +51,15 @@ public class AttendService {
             for (AttendInfoStudentEntity data : attendInfoStudentRepository.findByStudent(stuData)) {
                 AttendStuResponseVO attStu = new AttendStuResponseVO();
                 String status = "";
-                if (data.getAstuStatus()==null) status = "";
-                else if (data.getAstuStatus()==1) status = "O";
-                else if (data.getAstuStatus()==0) status = "X";
-                attStu.setAmasSeq(data.getAttendInfoMaster().getAmasSeq());
-                attStu.setDate(data.getAttendInfoMaster().getAmasDate());
-                attStu.setStatus(status);
-                attStuList.add(attStu);
+                if (data.getAttendInfoMaster().getLecture()==lecture) {
+                    if (data.getAstuStatus()==null) status = "";
+                    else if (data.getAstuStatus()==1) status = "O";
+                    else if (data.getAstuStatus()==0) status = "X";
+                    attStu.setAmasSeq(data.getAttendInfoMaster().getAmasSeq());
+                    attStu.setDate(data.getAttendInfoMaster().getAmasDate());
+                    attStu.setStatus(status);
+                    attStuList.add(attStu);
+                }
             }
             attMas.setMbSeq(stuData.getMbSeq());
             attMas.setName(stuData.getMbName());
