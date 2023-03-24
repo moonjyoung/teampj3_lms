@@ -53,7 +53,7 @@ public class FinalScoreService {
             if(getGrade.getFinalGrade() != null) {
                 grade = getGrade.getFinalGrade().getFgName();
             }
-            for(int j=0; j<studentInClass.size(); j++) {
+            for(int j=0; j<rank.size(); j++) {
                 if(rank.get(j).getStudentCode().equals(studentInClass.get(i).getStudent().getMbId())) {
                     ranking = rank.get(j).getStudentRank();
                 }
