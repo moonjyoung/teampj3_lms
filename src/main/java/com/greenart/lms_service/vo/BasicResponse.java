@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 public class BasicResponse {
+    @Schema(description = "성공/실패 여부", example = "true or false")
     protected Boolean status;
+    @Schema(description = "메세지", example = "message")
     protected String message;
 
     public BasicResponse() {

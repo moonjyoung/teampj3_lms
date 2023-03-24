@@ -35,6 +35,7 @@ import com.greenart.lms_service.repository.score.ScoreCateRepository;
 import com.greenart.lms_service.repository.score.ScoreMasterRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
+import com.greenart.lms_service.service.AttendService;
 import com.greenart.lms_service.vo.attend.AttendMasResponseVO;
 import com.greenart.lms_service.vo.attend.AttendResponseVO;
 import com.greenart.lms_service.vo.attend.AttendStuResponseVO;
@@ -59,6 +60,7 @@ class AttendServiceApplicationTests {
     @Autowired private ScoreMasterRepository scoreMasterRepository;
     @Autowired private ScoreStudentRepository scoreStudentRepository;
 
+    @Autowired private AttendService attendService;
 
 	@Test // 강의정보, 학기정보, 강의 수업요일정보 입력되어 있을때 해당학기 해당강의 출결일 자동입력 코드
 	void putAttendDay() {
@@ -223,6 +225,11 @@ class AttendServiceApplicationTests {
         response.setStatus(true);
         response.setMessage("조회 성공");
         System.out.println(response);
+    }
+
+    @Test
+    void putAttFGrade() { // 출결 F 적용 여부 테스트 코드
+        attendService.putAttendFGrade("BAC001-01");
     }
 
 }
