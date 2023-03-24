@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.greenart.lms_service.entity.LectureInfoEntity;
+import com.greenart.lms_service.entity.score.ScoreCateEntity;
 import com.greenart.lms_service.service.StaffService;
 import com.greenart.lms_service.vo.BasicResponse;
 import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
 import com.greenart.lms_service.vo.score.UpdateEvaluationTypeVO;
+import com.greenart.lms_service.vo.score.UpdateMaxScoreVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,6 +67,37 @@ public class StaffAPIController {
         UpdateEvaluationTypeVO updateEvaluationType = staffService.updateEvaluationType(liSeq, data);
         map.put("message", "평가방식 수정완료");
         map.put("data", updateEvaluationType);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    // @Operation(summary = "강의의 출/중/기/과 만점 수정", description = "해당 강의의 항목별 만점을 수정합니다. ")
+    // @PostMapping("/lectures/{liSeq}/{scSeq}")
+    // public ResponseEntity<Object> postMaxScore(
+    //     @Parameter(description = "강의 번호", example = "1")
+    //     @PathVariable Long liSeq, 
+    //     @Parameter(description = "1:출석/2:중간/3:기말/4:과제", example = "1")
+    //     @PathVariable Long scSeq,
+    //     @RequestBody UpdateMaxScoreVO data
+    // ) {
+    //     Map<String, Object> map = new LinkedHashMap<>();
+    //     UpdateMaxScoreVO updateMaxScore = staffService.updateMaxScore(liSeq, scSeq, data);
+    //     map.put("message", "평가방식 수정완료");
+    //     map.put("data", updateMaxScore);
+    //     return new ResponseEntity<>(map, HttpStatus.OK);
+    // }
+    @Operation(summary = "강의의 출/중/기/과 만점 수정", description = "해당 강의의 항목별 만점을 수정합니다. ")
+    @PostMapping("/lectures/{liSeq}/{scSeq}")
+    public ResponseEntity<Object> postMaxScore(
+        @Parameter(description = "강의 번호", example = "1")
+        @PathVariable LectureInfoEntity liSeq, 
+        @Parameter(description = "1:출석/2:중간/3:기말/4:과제", example = "1")
+        @PathVariable ScoreCateEntity scSeq,
+        @RequestBody UpdateMaxScoreVO data
+    ) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        UpdateMaxScoreVO updateMaxScore = staffService.updateMaxScore(liSeq, scSeq, data);
+        map.put("message", "평가방식 수정완료");
+        map.put("data", updateMaxScore);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

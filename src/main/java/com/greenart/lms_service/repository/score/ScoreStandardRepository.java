@@ -1,6 +1,7 @@
 package com.greenart.lms_service.repository.score;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface ScoreStandardRepository extends JpaRepository<ScoreStandardEnti
     @Query(value = "select sum(if(a.lectureInfo.liSeq = :liSeq, a.ssScoreMax, 0)) as totalMaxScore from ScoreStandardEntity a")
     TotalMaxScore findByLectureInfo(@Param("liSeq") Long liSeq);
 
+
+    // Optional<Object> findByLectureInfoAndScCate(LectureInfoEntity lectureinfo, ScoreStandardEntity scoreCate);
 }
