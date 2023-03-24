@@ -2,20 +2,25 @@ package com.greenart.lms_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.greenart.lms_service.entity.LectureInfoEntity;
+import com.greenart.lms_service.entity.score.ScoreCateEntity;
+// import com.greenart.lms_service.entity.score.MaxScoreEntity;
+// import com.greenart.lms_service.entity.score.MaxScoreKeyEntity;
 import com.greenart.lms_service.entity.score.ScoreStandardEntity;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.repository.LectureInfoRepository;
+// import com.greenart.lms_service.repository.score.MaxScoreRepository;
 import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.vo.score.MaxScoreAllResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreBasicResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreListResponseVO;
 import com.greenart.lms_service.vo.score.MaxScoreResponseVO;
 import com.greenart.lms_service.vo.score.UpdateEvaluationTypeVO;
-import com.greenart.lms_service.vo.score.UpdateMiddleVO;
+import com.greenart.lms_service.vo.score.UpdateMaxScoreVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class StaffService {
     private final LectureInfoRepository lectureInfoRepository;
     private final ScoreStandardRepository scoreStandardRepository;
+    // private final MaxScoreRepository maxScoreRepository;
     
     public MaxScoreResponseVO getLectureScoreMax(Long liSeq) {
         LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
@@ -91,14 +97,29 @@ public class StaffService {
         return response;
     }
 
+    // 강의별 평가방식 정보 수정
     public UpdateEvaluationTypeVO updateEvaluationType(Long liSeq, UpdateEvaluationTypeVO data) {
         LectureInfoEntity updateType = lectureInfoRepository.findById(liSeq).orElseThrow();
         updateType.setEvaluationType(data);
         lectureInfoRepository.save(updateType);
         return data;
     }
-    public UpdateMiddleVO updateMiddleMax(Long liSeq, UpdateMiddleVO data) {
-        ScoreStandardEntity updateMiddle = scoreStandardRepository.findByLectureInfoAndScoreCate(liSeq, data);
-        
+
+    // 만점 수정
+    public UpdateMaxScoreVO updateMaxScore(LectureInfoEntity lecture,ScoreCateEntity score ,UpdateMaxScoreVO data) {
+        ScoreStandardEntity updateMax = scoreStandardRepository.findByLectureInfoAndScoreCate(lecture, score);
+        updateMax.setSsScoreMax(data);
+        scoreStandardRepository.save(updateMax);
+        return data;
     }
+    // public UpdateMaxScoreVO updateMaxScore(Long liSeq, Long scSeq, UpdateMaxScoreVO data) {
+    //     MaxScoreEntity updateMax = new MaxScoreEntity();
+    //     MaxScoreKeyEntity id = new MaxScoreKeyEntity(liSeq, scSeq);
+    //     // MaxScoreEntity updateMax = maxScoreRepository.findById(new MaxScoreKeyEntity(liSeq, scSeq));
+    //     updateMax.setId(id);
+    //     updateMax.setSsScoreMax(data);
+    //     maxScoreRepository.save(updateMax);
+    //     return data;
+    //     // return updateMax.orElseGet(MaxScoreEntity::new);
+    // }
 }

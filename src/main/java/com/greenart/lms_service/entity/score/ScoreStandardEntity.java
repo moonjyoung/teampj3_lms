@@ -1,7 +1,7 @@
 package com.greenart.lms_service.entity.score;
 
 import com.greenart.lms_service.entity.LectureInfoEntity;
-import com.greenart.lms_service.vo.score.UpdateMiddleVO;
+import com.greenart.lms_service.vo.score.UpdateMaxScoreVO;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -27,7 +27,7 @@ public class ScoreStandardEntity {
     @Column(name = "ss_status") private Boolean ssStatus;
     @Column(name = "ss_open_status") private Boolean ssOpenStatus;
 
-    public void setSsScoreMax(UpdateMiddleVO data) {
-        this.ssScoreMax = data.getMiddleMax();
+    public void setSsScoreMax(UpdateMaxScoreVO data) {
+        this.ssScoreMax = data.getMaxScore();
     }
 }
