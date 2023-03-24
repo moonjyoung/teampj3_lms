@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import com.greenart.lms_service.entity.SemesterInfoEntity;
 import com.greenart.lms_service.entity.member.ProfessorEntity;
 import com.greenart.lms_service.entity.member.StaffEntity;
 import com.greenart.lms_service.entity.member.StudentEntity;
+import com.greenart.lms_service.entity.score.ScoreMasterEntity;
+import com.greenart.lms_service.entity.score.ScoreStudentEntity;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.repository.AttendInfoMasterRepository;
 import com.greenart.lms_service.repository.AttendInfoStudentRepository;
@@ -138,6 +141,29 @@ class InsertDummyDataTests {
                     .staffWork(staffWork)
                     .build();
             memberBasicRepository.save(entity);
+        }
+    }
+
+    @Test // 시험, 과제, 출석 점수 입력
+    void putScore() {
+        for (ScoreMasterEntity smas : scoreMasterRepository.findAll()) {
+            // ScoreMasterEntity smas = scoreMasterRepository.findById(2L).orElseThrow(() -> new CustomException("존재하지 않는 평가기준입니다."));
+            LectureInfoEntity lecture = smas.getScoreStandard().getLectureInfo();
+            List<StudentEntity> stuList = new ArrayList<>();
+            for (ClassRegisterEntity data : classRegisterRepository.findByLectureInfo(lecture)) {
+                stuList.add(data.getStudent());
+            }
+            Random rand = new Random();
+            Integer scoreMax = smas.getSmasScore();
+    
+            for (StudentEntity data : stuList) {
+                ScoreStudentEntity sstu = ScoreStudentEntity.builder()
+                        .scoreMaster(smas)
+                        .student(data)
+                        .sstuScore(rand.nextInt(scoreMax+1))
+                        .build();
+                scoreStudentRepository.save(sstu);
+            }
         }
     }
 }

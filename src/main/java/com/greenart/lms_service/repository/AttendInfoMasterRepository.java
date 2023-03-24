@@ -11,5 +11,5 @@ import com.greenart.lms_service.entity.LectureInfoEntity;
 public interface AttendInfoMasterRepository extends JpaRepository<AttendInfoMasterEntity, Long>{
     public List<AttendInfoMasterEntity> findByLecture(LectureInfoEntity lecture);
     public AttendInfoMasterEntity findByLectureAndAmasDate(LectureInfoEntity lecture, LocalDate amasDate);
-    
+    public Long countByLecture(LectureInfoEntity lecture);
 }
