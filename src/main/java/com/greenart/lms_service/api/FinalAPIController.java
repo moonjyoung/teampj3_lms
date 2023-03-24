@@ -28,16 +28,9 @@ public class FinalAPIController {
     }
 
     @PostMapping("/{code}")
-    @Operation(summary = "최종 성적 입력", description = "강의 코드 와 학번 원하는 성적 입력 시 성적이 부여됩니다. 성적은 1(A)~13(F) 숫자값으로 부여")
+    @Operation(summary = "최종 성적 입력", description = "강의 코드 와 학번 원하는 성적 입력 시 성적이 부여되며 기존 성적이 있을 시 변경됩니다. 성적은 1(A+)~13(F) 숫자값으로 부여, 0 입력 시 기존 성적 취소")
     public ResponseEntity<MessageVO> insertFinalGrade(@Parameter(description = "강의 코드", example = "BAC001-01") @PathVariable String code, @RequestBody InsertFinalScoreVO data) {
         MessageVO response = finalScoreService.insertFinalScore(data, code);
-        return new ResponseEntity<>(response, response.getCode());
-    }
-
-    @PatchMapping("/{code}")
-    @Operation(summary = "최종 성적 수정", description = "강의 코드 와 학번 원하는 성적 입력 시 성적이 수정됩니다. 성적은 1(A)~13(F) 숫자값으로 부여, 0 입력 시 기존 입력 성적 취소")
-    public ResponseEntity<MessageVO> updateFinalGrade(@Parameter(description = "강의 코드", example = "BAC001-01") @PathVariable String code, @RequestBody InsertFinalScoreVO data) {
-        MessageVO response = finalScoreService.updateFinalScore(data, code);
         return new ResponseEntity<>(response, response.getCode());
     }
 }

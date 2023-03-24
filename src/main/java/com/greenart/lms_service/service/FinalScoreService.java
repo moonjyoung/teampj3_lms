@@ -44,17 +44,13 @@ public class FinalScoreService {
         List<FinalScoreVO> finalScore = new ArrayList<>();
         TotalMaxScore totalMaxScore = scoreStandardRepository.findByLectureInfo(lecture.getLiSeq());
         List<RankScore> rank = scoreStudentRepository.findByLiSeq(lecture.getLiSeq());
-        String grade = "미평가";
         Integer ranking = null;
-        for(int i=0; i<studentInClass.size(); i++) {
+        for (int i = 0; i < studentInClass.size(); i++) {
             List<ViewEntity> view = viewRepository.findByLectureAndStudent(lecture.getLiCode(), studentInClass.get(i).getStudent().getMbId());
             TotalScore totalScore = scoreStudentRepository.findByMbSeq(studentInClass.get(i).getStudent().getMbSeq(), lecture.getLiSeq());
             ClassRegisterEntity getGrade = classRegisterRepository.findByLectureInfoAndStudent(lecture, studentInClass.get(i).getStudent());
-            if(getGrade.getFinalGrade() != null) {
-                grade = getGrade.getFinalGrade().getFgName();
-            }
-            for(int j=0; j<rank.size(); j++) {
-                if(rank.get(j).getStudentCode().equals(studentInClass.get(i).getStudent().getMbId())) {
+            for (int j = 0; j < rank.size(); j++) {
+                if (rank.get(j).getStudentCode().equals(studentInClass.get(i).getStudent().getMbId())) {
                     ranking = rank.get(j).getStudentRank();
                 }
             }
@@ -65,17 +61,16 @@ public class FinalScoreService {
                     .totalMaxScore(totalMaxScore.getTotalMaxScore())
                     .totalScore(totalScore.getTotalScore())
                     .rank(ranking)
-                    .grade(grade)
+                    .grade(getGrade.getFinalGrade().getFgName())
                     .build();
             finalScore.add(response);
-            grade = "미평가";
         }
         return finalScore;
     }
 
     public MessageVO insertFinalScore(InsertFinalScoreVO data, String lectureCode) {
         LectureInfoEntity lectureInfo = lectureInfoRepository.findByLiCode(lectureCode);
-        if(lectureInfo == null) {
+        if (lectureInfo == null) {
             return MessageVO.builder()
                     .status(false)
                     .message("강의 코드를 다시 확인하세요.")
@@ -83,73 +78,84 @@ public class FinalScoreService {
                     .build();
         }
         StudentEntity student = studentRepository.findByMbId(data.getStudentCode());
-        if(student == null) {
+        if (student == null) {
             return MessageVO.builder()
                     .status(false)
                     .message("학번을 다시 확인하세요.")
                     .code(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        ClassRegisterEntity finalGrade = classRegisterRepository.findByLectureInfoAndStudent(lectureInfo, student);
-        FinalGradeEntity checkGrade = finalGradeRepository.findByFgSeq(data.getGrade());
-        if(checkGrade == null) {
+        Long fgSeq = data.getGrade();
+        if(data.getGrade() == 0) {
+            fgSeq = 15L;
+        }
+        FinalGradeEntity checkGrade = finalGradeRepository.findByFgSeq(fgSeq);
+        if (checkGrade == null) {
             return MessageVO.builder()
                     .status(false)
                     .message("성적값을 다시 확인해주세요.")
                     .code(HttpStatus.BAD_REQUEST)
                     .build();
         }
-        finalGrade.setFinalGrade(checkGrade);
-        classRegisterRepository.save(finalGrade);
-        return MessageVO.builder()
-                .status(true)
-                .message(student.getMbName()+"("+student.getMbId()+") 학생의 최종 학점 : "+checkGrade.getFgName())
-                .code(HttpStatus.OK)
-                .build();
-    }
 
-    public MessageVO updateFinalScore(InsertFinalScoreVO data, String lectureCode) {
-        LectureInfoEntity lectureInfo = lectureInfoRepository.findByLiCode(lectureCode);
-        if(lectureInfo == null) {
-            return MessageVO.builder()
-                    .status(false)
-                    .message("강의 코드를 다시 확인하세요.")
-                    .code(HttpStatus.BAD_REQUEST)
-                    .build();
+        if(lectureInfo.getLiEvaluationType() == 1) {
+            List<ClassRegisterEntity> studentInClass = classRegisterRepository.findByLectureInfo(lectureInfo);
+            int gradeA = 1;
+            int gradeB = 1;
+            int gradeStudent = studentInClass.size();
+            for (int i = 0; i < studentInClass.size(); i++) {
+                if(studentInClass.get(i).getFinalGrade().getFgSeq() == 14) {
+                    gradeStudent --;
+                }
+                else if(studentInClass.get(i).getFinalGrade().getFgSeq() == 1 || studentInClass.get(i).getFinalGrade().getFgSeq() == 2 || studentInClass.get(i).getFinalGrade().getFgSeq() == 3) {
+                    gradeA ++;
+                }
+                else if(studentInClass.get(i).getFinalGrade().getFgSeq() == 4 || studentInClass.get(i).getFinalGrade().getFgSeq() == 5 || studentInClass.get(i).getFinalGrade().getFgSeq() == 6) {
+                    gradeB ++;
+                }
+            }
+            double gradeAPercent = Math.floor((gradeA/(double)gradeStudent)*10)/10;
+            double gradeBPercent = Math.floor(((gradeA+gradeB)/(double)gradeStudent)*10)/10;
+
+            if(gradeAPercent > 0.3 && (data.getGrade() == 1 || data.getGrade() == 2 || data.getGrade() == 3)) {
+                return MessageVO.builder()
+                        .status(false)
+                        .message("A 학점은 30% 까지만 부여가능합니다.")
+                        .code(HttpStatus.BAD_REQUEST)
+                        .build();
+            }
+            else if(gradeBPercent > 0.7 && (data.getGrade() == 4 || data.getGrade() == 5 || data.getGrade() == 6)) {
+                return MessageVO.builder()
+                        .status(false)
+                        .message("B 학점은 70% 까지만 부여가능합니다.")
+                        .code(HttpStatus.BAD_REQUEST)
+                        .build();
+            }
         }
-        StudentEntity student = studentRepository.findByMbId(data.getStudentCode());
-        if(student == null) {
-            return MessageVO.builder()
-                    .status(false)
-                    .message("학번을 다시 확인하세요.")
-                    .code(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+
         ClassRegisterEntity finalGrade = classRegisterRepository.findByLectureInfoAndStudent(lectureInfo, student);
-        String beforeUpdate = finalGrade.getFinalGrade().getFgName();
-        FinalGradeEntity checkGrade = finalGradeRepository.findByFgSeq(data.getGrade());
-        if(data.getGrade() == 0) {
-            finalGrade.setFinalGrade(null);
+        if(finalGrade.getFinalGrade().getFgSeq() == 14) {
+            return MessageVO.builder()
+                    .status(false)
+                    .message(student.getMbName() + "(" + student.getMbId() + ") 학생은 출석 일수 부족으로 학점을 부여할 수 없습니다.")
+                    .code(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+        else if (data.getGrade() == 0) {
+            finalGrade.setFinalGrade(finalGradeRepository.findByFgSeq(15L));
             classRegisterRepository.save(finalGrade);
             return MessageVO.builder()
                     .status(true)
-                    .message(student.getMbName()+"("+student.getMbId()+") 학생의 최종 학점 부여를 취소했습니다.")
+                    .message(student.getMbName() + "(" + student.getMbId() + ") 학생의 최종 학점 부여를 취소했습니다.")
                     .code(HttpStatus.OK)
                     .build();
         }
-        if(checkGrade == null) {
-            return MessageVO.builder()
-                    .status(false)
-                    .message("성적값을 다시 확인해주세요.")
-                    .code(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+        String beforeUpdate = finalGrade.getFinalGrade().getFgName();
         finalGrade.setFinalGrade(checkGrade);
         classRegisterRepository.save(finalGrade);
         return MessageVO.builder()
                 .status(true)
-                .message(student.getMbName()+"("+student.getMbId()+") 학생의 최종 학점 : "+checkGrade.getFgName()+" (변경 전 학점 : "+beforeUpdate+")")
+                .message(student.getMbName() + "(" + student.getMbId() + ") 학생의 최종 학점 : " + checkGrade.getFgName() + " (변경 전 학점 : " + beforeUpdate + ")")
                 .code(HttpStatus.OK)
                 .build();
     }

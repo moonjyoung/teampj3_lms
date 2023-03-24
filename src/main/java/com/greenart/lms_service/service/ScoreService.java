@@ -100,7 +100,7 @@ public class ScoreService {
         scoreStudentRepository.save(score);
         return MessageVO.builder()
                 .status(true)
-                .message(student.getMbName()+"( "+student.getMbId()+" ) 학생의 "+scoreMaster.getSmasName()+" 점수 : "+data.getScore())
+                .message(student.getMbName()+"("+student.getMbId()+") 학생의 "+scoreMaster.getSmasName()+" 점수 : "+data.getScore())
                 .code(HttpStatus.OK)
                 .build();
     }
