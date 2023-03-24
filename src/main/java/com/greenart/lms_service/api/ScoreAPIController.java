@@ -46,7 +46,8 @@ public class ScoreAPIController {
     }
 
     @PostMapping("/{liSeq}")
-    public ResponseEntity<MessageVO> postScore(@PathVariable Long liSeq, @RequestBody ScoreInsertVO data) {
+    @Operation(summary = "학생 점수 부여")
+    public ResponseEntity<MessageVO> postScore(@Parameter(description = "강의 번호") @PathVariable Long liSeq, @RequestBody ScoreInsertVO data) {
         MessageVO response = scoreService.insertScore(liSeq, data);
         return new ResponseEntity<>(response, response.getCode());
     }

@@ -96,6 +96,18 @@ public class ScoreService {
                     .code(HttpStatus.BAD_REQUEST)
                     .build();
         }
+        ScoreStudentEntity scoreStudent = scoreStudentRepository.findByScoreMasterAndStudent(scoreMaster, student);
+        if(scoreStudent != null) {
+            Integer beforeScore = scoreStudent.getSstuScore();
+            scoreStudent.setSstuScore(data.getScore());
+            scoreStudentRepository.save(scoreStudent);
+            return MessageVO.builder()
+                    .status(true)
+                    .message(student.getMbName()+"("+student.getMbId()+") 학생의 "+scoreMaster.getSmasName()+" 점수 : "+data.getScore()+" (기존 : "+beforeScore+")")
+                    .code(HttpStatus.OK)
+                    .build();
+
+        }
         ScoreStudentEntity score = new ScoreStudentEntity(null, scoreMaster, student, data.getScore());
         scoreStudentRepository.save(score);
         return MessageVO.builder()

@@ -4,15 +4,12 @@ import com.greenart.lms_service.entity.member.MemberBasicEntity;
 import com.greenart.lms_service.entity.member.StudentEntity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
