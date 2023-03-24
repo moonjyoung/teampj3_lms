@@ -34,4 +34,7 @@ public class ClassRegisterEntity {
 
     @OneToOne @JoinColumn(name = "cr_fg_seq") private FinalGradeEntity finalGrade;
 
+    public void ChangeAttFGrade(FinalGradeEntity finalGrade) {
+        this.finalGrade = finalGrade;
+    }
 }
