@@ -13,7 +13,7 @@ public class MaxScoreResponseVO extends BasicResponse {
     private Long liSeq;
     @Schema(description = "강의 명", example = "JAVA 백엔드 개발자 양성")
     private String name;
-    @Schema(description = "강의 코드", example = "BAC001-00")
+    @Schema(description = "강의 코드", example = "BAC001-01")
     private String code;
     @Schema(description = "평가 방식(상대평가/절대평가)", example = "상대평가")
     private String evaluation;

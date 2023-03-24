@@ -9,7 +9,7 @@ import lombok.Data;
 public class LectureTimeVO {
     @Schema(description = "강의 명", example = "JAVA 백엔드 개발자 양성")
     private String title;
-    @Schema(description = "강의 고유코드", example = "BAC001-00")
+    @Schema(description = "강의 고유코드", example = "BAC001-01")
     private String type;
     @Schema(description = "강의 시간(시작)", example = "2023-02-28T11:00")
     private String startDate;

@@ -87,7 +87,7 @@ public class MemberService {
                             vo.setTitle(lecture.getLiName());
                             vo.setType(lecture.getLiCode());
                             vo.setStartDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdStart()).toString());
-                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).minusMinutes(10L).toString());
+                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).plusMinutes(50L).toString());
                             resultList.add(vo);
                         }
                     }

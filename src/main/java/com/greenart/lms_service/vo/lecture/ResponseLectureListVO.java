@@ -9,7 +9,7 @@ import lombok.Data;
 public class ResponseLectureListVO {
     @Schema(description = "강의 번호", example = "1")
     private Long liSeq;
-    @Schema(description = "강의 코드", example = "BAC001-00")
+    @Schema(description = "강의 코드", example = "BAC001-01")
     private String liCode;
     @Schema(description = "강의 명", example = "JAVA 백엔드 개발자 양성")
     private String liName;
