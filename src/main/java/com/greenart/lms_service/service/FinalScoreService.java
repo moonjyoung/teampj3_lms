@@ -90,7 +90,7 @@ public class FinalScoreService {
             fgSeq = 15L;
         }
         FinalGradeEntity checkGrade = finalGradeRepository.findByFgSeq(fgSeq);
-        if (checkGrade == null) {
+        if (fgSeq == 14L || checkGrade == null) {
             return MessageVO.builder()
                     .status(false)
                     .message("성적값을 다시 확인해주세요.")
