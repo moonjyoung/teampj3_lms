@@ -2,6 +2,8 @@ package com.greenart.lms_service.repository.score;
 
 import com.greenart.lms_service.vo.finalGrade.view.RankScore;
 import com.greenart.lms_service.vo.finalGrade.view.TotalScore;
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.greenart.lms_service.entity.member.StudentEntity;
@@ -18,4 +20,8 @@ public interface ScoreStudentRepository extends JpaRepository<ScoreStudentEntity
     TotalScore findByMbSeq(@Param("student") Long mbSeq, @Param("lecture") Long liSeq);
     @Query(value = "select sum(if(d.lectureInfo.liSeq = :lecture, a.sstuScore, 0)) as studentScore, rank() over (order by sum(if(d.lectureInfo.liSeq = :lecture, a.sstuScore, 0)) desc) as studentRank, c.mbId as studentCode from ScoreStudentEntity a join a.scoreMaster b join a.student c join b.scoreStandard d group by c.mbId")
     List<RankScore> findByLiSeq(@Param("lecture") Long liSeq);
+
+
+
+
 }
