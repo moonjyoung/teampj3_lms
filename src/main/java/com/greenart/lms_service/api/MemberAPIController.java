@@ -37,11 +37,12 @@ public class MemberAPIController {
             @ApiResponse(responseCode = "400", description = "false",
                 content = @Content(schema = @Schema(implementation = BasicResponse.class)))
         })
-    @GetMapping("/timetable/{mbSeq}")
+    @GetMapping("/timetable/{mbSeq}/{siSeq}")
     public ResponseEntity<LectureTimeResponseVO> getTimeTable(
-        @Parameter(description = "회원(학생, 교수) 번호", example = "6") @PathVariable Long mbSeq
+        @Parameter(description = "회원(학생, 교수) 번호", example = "1") @PathVariable Long mbSeq,
+        @Parameter(description = "학기 번호", example = "1") @PathVariable Long siSeq
     ) {
-        return new ResponseEntity<>(memberService.getTimeTable(mbSeq), HttpStatus.OK);
+        return new ResponseEntity<>(memberService.getTimeTable(mbSeq, siSeq), HttpStatus.OK);
     }
 
     @Operation(summary = "로그인", description = "학생/교수/행정 계정이 모두 공통 api를 사용하며 로그인합니다.",
@@ -66,7 +67,7 @@ public class MemberAPIController {
     @GetMapping("/mygrade/{mbSeq}/{siSeq}")
     public ResponseEntity<StudentAllGradeResponseVO> getMyGrade(
         @Parameter(description = "학생 번호", example = "1") @PathVariable Long mbSeq,
-        @Parameter(description = "학기 번호 (더미 데이터상 1로 고정입니다.)", example = "1") @PathVariable Long siSeq
+        @Parameter(description = "학기 번호", example = "1") @PathVariable Long siSeq
     ) {
         return new ResponseEntity<>(studentService.getMyGrade(mbSeq, siSeq), HttpStatus.OK);
     }
