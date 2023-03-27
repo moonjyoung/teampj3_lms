@@ -7,4 +7,5 @@ import com.greenart.lms_service.entity.member.StudentEntity;
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     StudentEntity findByMbId(String mbId);
     public StudentEntity findByMbIdAndMbPwd(String mbId, String mbPwd);
+    StudentEntity findByMbSeq(Long mbSeq);
 }

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenart.lms_service.service.LectureStudentService;
-import com.greenart.lms_service.vo.lectureStudent.LectureStudentDAO;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDaoVO;
+import com.greenart.lms_service.vo.lectureStudent.LectureStudentScoreVO;
+import com.greenart.lms_service.vo.student.LectureStudentTotalInfoVO;
+import com.greenart.lms_service.vo.student.LsTotalFinalVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +32,7 @@ public class LectureStudentAPIController {
     @Operation(summary = "수강생 조회", description = "liSeq 강의번호")
     @GetMapping("/{liSeq}") // liSeq다 맞추기
     public ResponseEntity<List<LectureStudentDaoVO>> getlectStuList(
-        @Parameter(description = "강의번호 ex crLiSeq:1")
+        @Parameter(description = "강의번호 ex liSeq:1")
         @PathVariable Long liSeq) {
         return new ResponseEntity<>(lecStuService.getLectureStudentList(liSeq), HttpStatus.OK);
     }
@@ -45,4 +47,18 @@ public class LectureStudentAPIController {
         @PathVariable String stuName) {
         return new ResponseEntity<>(lecStuService.searchLectureStudent(liSeq, stuName), HttpStatus.ACCEPTED);
     }
+
+    // 내 강의 수강생 성적 조회 scoreCateSeq 학생의 성적번호
+    @Operation(summary = "내 강의 수강생 성적 조회", description = "liSeq 강의번호, mbSeq 학생번호")
+    @GetMapping("/{liSeq}/list/{mbSeq}")
+    public ResponseEntity<LsTotalFinalVO> getStudentLectureScoreList(
+        @Parameter(description = "학생번호 ex mbSeq:1")
+        @PathVariable Long mbSeq,
+        @Parameter(description = "강의번호 ex liSeq:1")
+        @PathVariable Long liSeq
+    ) {
+        return new ResponseEntity<>(lecStuService.getlectureStudentTotalList(liSeq, mbSeq), HttpStatus.OK);
+    }
+    
+
 }

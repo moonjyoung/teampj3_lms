@@ -1,7 +1,6 @@
 package com.greenart.lms_service.vo.lectureStudent;
 
-import com.greenart.lms_service.vo.BasicResponse;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +13,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LectureStudentDaoVO {
-    //extends BasicResponse 
-    // private String proName; // 교수이름
-    // private String liName;  // 강의이름
-    // private String liCode; // 강의코드
-    private Long seq; //학생번호
-    private String stuName; // 학생이름
-    private String stuId;    // 학번
-    private String stuSubject; // 학생전공
-    private Integer stuGrade;  // 학년
+    @Schema(description = "학생고유번호", example = "1")
+    private Long seq;
+    @Schema(description = "학생이름", example = "강백호")
+    private String stuName;
+    @Schema(description = "학번", example = "2023123001")
+    private String stuId;
+    @Schema(description = "학과", example = "컴퓨터공학")
+    private String stuSubject;
+    @Schema(description = "학년", example = "1")
+    private Integer stuGrade; 
 
-    public LectureStudentDaoVO(LectureStudentDAO lecStuDao) {
-        this.seq = lecStuDao.getStuSeq();
+    public LectureStudentDaoVO(LectureStudentDAO lecStuDao) { // LectureStudentDAO view Entity(복합키걸려있음)
+        this.seq = lecStuDao.getMbSeq();
         this.stuName = lecStuDao.getStuName();
         this.stuId = lecStuDao.getMbId();
         this.stuSubject = lecStuDao.getStuSubject();
