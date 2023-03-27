@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LectureStudentCateListScoreVO {
-    // 강의에서
-    //  - 상위카테고리번호 카테고리이름(중간), 점수 , 최대점수
-    //  - 상위카테고리번호 카테고리이름(기말), 점수 , 최대점수
-    //  - 상위카테고리번호 카테고리이름(과제1), 점수 , 최대점수
-    @Schema(description = "카테고리번호", example = "1")
+
+    @Schema(description = "과제 항목번호", example = "1")
     private Long scoreCateSeq;
-    @Schema(description = "카테고리이름", example = "중간시험")
+    @Schema(description = "과제 항목이름", example = "중간시험")
     private String scoreCateName;
     @Schema(description = "학생점수", example = "50")
     private Integer score;

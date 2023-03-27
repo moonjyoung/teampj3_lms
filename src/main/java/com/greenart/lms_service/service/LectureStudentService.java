@@ -3,23 +3,30 @@ package com.greenart.lms_service.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.greenart.lms_service.entity.ClassRegisterEntity;
 import com.greenart.lms_service.entity.LectureInfoEntity;
 import com.greenart.lms_service.entity.member.StudentEntity;
+import com.greenart.lms_service.entity.score.ScoreMasterEntity;
+import com.greenart.lms_service.entity.score.ScoreStandardEntity;
+import com.greenart.lms_service.entity.score.ScoreStudentEntity;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.repository.AttendInfoStudentRepository;
 import com.greenart.lms_service.repository.ClassRegisterRepository;
 import com.greenart.lms_service.repository.LectureInfoRepository;
 import com.greenart.lms_service.repository.member.StudentRepository;
 import com.greenart.lms_service.repository.score.ScoreMasterRepository;
+import com.greenart.lms_service.repository.score.ScoreStandardRepository;
 import com.greenart.lms_service.repository.score.ScoreStudentRepository;
 import com.greenart.lms_service.repository.viewRepo.LectureStudentAttendVoVIEWRepository;
 import com.greenart.lms_service.repository.viewRepo.LectureStudentCateListScoreVoVIEWRepository;
 import com.greenart.lms_service.repository.viewRepo.LecturestudentdaoRepository;
+import com.greenart.lms_service.vo.finalGrade.vo.MessageVO;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDAO;
 import com.greenart.lms_service.vo.lectureStudent.LectureStudentDaoVO;
+import com.greenart.lms_service.vo.lectureStudent.UpdateStudentLectureScoreCateVO;
 import com.greenart.lms_service.vo.student.LectureStudentAttendVO;
 import com.greenart.lms_service.vo.student.LectureStudentAttendVoVIEW;
 import com.greenart.lms_service.vo.student.LectureStudentCateListScoreVO;
@@ -144,4 +151,34 @@ public class LectureStudentService {
 
         return result;
     }
+
+    // 내 강의 수강생 성적 수정 
+    public MessageVO updateStudentLectureScore(Long liSeq, Long mbSeq, UpdateStudentLectureScoreCateVO data) {
+        LectureInfoEntity lecture = lectureInfoRepository.findById(liSeq).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        StudentEntity student = stuRepo.findById(mbSeq).orElseThrow(() -> new CustomException("존재하지 않는 학생입니다."));
+
+        ScoreMasterEntity scoreMas = scoreMasStuRepo.findById(data.getScoreCateSeq()).orElseThrow(() -> new CustomException("존재하지 않는 평가입니다."));
+        ScoreStudentEntity scoreStu = scoreStuRepo.findByScoreMasterAndStudent(scoreMas, student);
+
+        if (scoreStu==null) throw new CustomException("강의-학생 정보가 맞지 않습니다.");
+
+        if(scoreMas.getSmasScore() < data.getCateStuScore() || 0 > data.getCateStuScore()) {
+            return MessageVO.builder()
+                .status(false)
+                .message("기준최대 점수를 넘을 수 없습니다. 0 보다 낮은 점수를 입력할수 없습니다.")
+                .code(HttpStatus.BAD_REQUEST)
+                .build();
+        }
+        else {
+            scoreStu.ChangeScore(data.getCateStuScore());
+            scoreStuRepo.save(scoreStu);
+    
+            return MessageVO.builder()
+                    .status(true)
+                    .message("변경되었습니다.")
+                    .code(HttpStatus.ACCEPTED)
+                    .build();
+        }
+    }
+
 }

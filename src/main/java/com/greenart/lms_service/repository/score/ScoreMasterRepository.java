@@ -15,4 +15,5 @@ public interface ScoreMasterRepository extends JpaRepository<ScoreMasterEntity, 
     //ScoreMasterEntity findByScoreStandard(ScoreMasterEntity scoreStandard);
 
     List<ScoreMasterEntity> findByScoreStandard (ScoreStandardEntity scoreStandard);
+    ScoreMasterEntity findBySmasScore(Integer smasScore);
 }
