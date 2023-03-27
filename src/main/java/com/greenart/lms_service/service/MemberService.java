@@ -13,6 +13,7 @@ import com.greenart.lms_service.entity.AttendInfoMasterEntity;
 import com.greenart.lms_service.entity.ClassDateEntity;
 import com.greenart.lms_service.entity.ClassRegisterEntity;
 import com.greenart.lms_service.entity.LectureInfoEntity;
+import com.greenart.lms_service.entity.SemesterInfoEntity;
 import com.greenart.lms_service.entity.member.MemberBasicEntity;
 import com.greenart.lms_service.entity.member.ProfessorEntity;
 import com.greenart.lms_service.entity.member.StaffEntity;
@@ -22,6 +23,7 @@ import com.greenart.lms_service.repository.AttendInfoMasterRepository;
 import com.greenart.lms_service.repository.ClassDateRepository;
 import com.greenart.lms_service.repository.ClassRegisterRepository;
 import com.greenart.lms_service.repository.LectureInfoRepository;
+import com.greenart.lms_service.repository.SemesterInfoRepository;
 import com.greenart.lms_service.repository.member.MemberBasicRepository;
 import com.greenart.lms_service.repository.member.ProfessorRepository;
 import com.greenart.lms_service.repository.member.StaffRepository;
@@ -50,10 +52,12 @@ public class MemberService {
     private final AttendInfoMasterRepository attendInfoMasterRepository;
     private final ClassDateRepository classDateRepository;
     private final ClassRegisterRepository classRegisterRepository;
+    private final SemesterInfoRepository semesterInfoRepository;
     
-    public LectureTimeResponseVO getTimeTable(Long mbSeq) {
+    public LectureTimeResponseVO getTimeTable(Long mbSeq, Long siSeq) {
         Optional<StudentEntity> studentOpt = studentRepository.findById(mbSeq);
         Optional<ProfessorEntity> professorOpt = professorRepository.findById(mbSeq);
+        SemesterInfoEntity semester = semesterInfoRepository.findById(siSeq).orElseThrow(() -> new CustomException("학기정보를 확인해주세요."));
         
         LectureTimeResponseVO result = new LectureTimeResponseVO();
         List<LectureTimeVO> resultList = new ArrayList<>();
@@ -61,7 +65,9 @@ public class MemberService {
         if (studentOpt.isPresent()) {
             List<LectureInfoEntity> lectureList = new ArrayList<>();
             for (ClassRegisterEntity entity : classRegisterRepository.findByStudent(studentOpt.get())) {
-                lectureList.add(entity.getLectureInfo());
+                if (entity.getLectureInfo().getSemesterInfoEntity()==semester) {
+                    lectureList.add(entity.getLectureInfo());
+                }
             }
             for (AttendInfoMasterEntity amasEntity : attendInfoMasterRepository.findAll()) {
                 for (LectureInfoEntity lecture : lectureList) {
@@ -71,7 +77,7 @@ public class MemberService {
                             vo.setTitle(lecture.getLiName());
                             vo.setType(lecture.getLiCode());
                             vo.setStartDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdStart()).toString());
-                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).minusMinutes(10L).toString());
+                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).plusMinutes(50L).toString());
                             resultList.add(vo);
                         }
                     }
@@ -79,8 +85,14 @@ public class MemberService {
             }
         }
         else if (professorOpt.isPresent()) {
+            List<LectureInfoEntity> lectureList = new ArrayList<>();
+            for (LectureInfoEntity lecture : lectureInfoRepository.findByProfessor(professorOpt.get())) {
+                if (lecture.getSemesterInfoEntity()==semester) {
+                    lectureList.add(lecture);
+                }
+            }
             for (AttendInfoMasterEntity amasEntity : attendInfoMasterRepository.findAll()) {
-                for (LectureInfoEntity lecture : lectureInfoRepository.findByProfessor(professorOpt.get())) {
+                for (LectureInfoEntity lecture : lectureList) {
                     for (ClassDateEntity classDateEntity : classDateRepository.findByLecture(lecture)) {
                         if (amasEntity.getAmasDate().getDayOfWeek().getValue()==classDateEntity.getCdWeek()) {
                             LectureTimeVO vo = new LectureTimeVO();
