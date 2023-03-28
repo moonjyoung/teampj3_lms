@@ -18,6 +18,8 @@ import com.greenart.lms_service.entity.member.MemberBasicEntity;
 import com.greenart.lms_service.entity.member.ProfessorEntity;
 import com.greenart.lms_service.entity.member.StaffEntity;
 import com.greenart.lms_service.entity.member.StudentEntity;
+import com.greenart.lms_service.entity.view.TimetableProfessorView;
+import com.greenart.lms_service.entity.view.TimetableStudentView;
 import com.greenart.lms_service.exception.CustomException;
 import com.greenart.lms_service.repository.AttendInfoMasterRepository;
 import com.greenart.lms_service.repository.ClassDateRepository;
@@ -28,6 +30,8 @@ import com.greenart.lms_service.repository.member.MemberBasicRepository;
 import com.greenart.lms_service.repository.member.ProfessorRepository;
 import com.greenart.lms_service.repository.member.StaffRepository;
 import com.greenart.lms_service.repository.member.StudentRepository;
+import com.greenart.lms_service.repository.view.TimetableProfessorViewRepository;
+import com.greenart.lms_service.repository.view.TimetableStudentViewRepository;
 import com.greenart.lms_service.security.provider.JwtTokenProvider;
 import com.greenart.lms_service.security.service.CustomUserDetailService;
 import com.greenart.lms_service.utils.ConvertClassDateTime;
@@ -48,62 +52,37 @@ public class MemberService {
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
     private final StaffRepository staffRepository;
-    private final LectureInfoRepository lectureInfoRepository;
-    private final AttendInfoMasterRepository attendInfoMasterRepository;
-    private final ClassDateRepository classDateRepository;
-    private final ClassRegisterRepository classRegisterRepository;
     private final SemesterInfoRepository semesterInfoRepository;
+    
+    private final TimetableStudentViewRepository timetableStudentViewRepository;
+    private final TimetableProfessorViewRepository timetableProfessorViewRepository;
     
     public LectureTimeResponseVO getTimeTable(Long mbSeq, Long siSeq) {
         Optional<StudentEntity> studentOpt = studentRepository.findById(mbSeq);
         Optional<ProfessorEntity> professorOpt = professorRepository.findById(mbSeq);
         SemesterInfoEntity semester = semesterInfoRepository.findById(siSeq).orElseThrow(() -> new CustomException("학기정보를 확인해주세요."));
-        
+
         LectureTimeResponseVO result = new LectureTimeResponseVO();
         List<LectureTimeVO> resultList = new ArrayList<>();
 
         if (studentOpt.isPresent()) {
-            List<LectureInfoEntity> lectureList = new ArrayList<>();
-            for (ClassRegisterEntity entity : classRegisterRepository.findByStudent(studentOpt.get())) {
-                if (entity.getLectureInfo().getSemesterInfoEntity()==semester) {
-                    lectureList.add(entity.getLectureInfo());
-                }
-            }
-            for (AttendInfoMasterEntity amasEntity : attendInfoMasterRepository.findAll()) {
-                for (LectureInfoEntity lecture : lectureList) {
-                    for (ClassDateEntity classDateEntity : classDateRepository.findByLecture(lecture)) {
-                        if (amasEntity.getAmasDate().getDayOfWeek().getValue()==classDateEntity.getCdWeek()) {
-                            LectureTimeVO vo = new LectureTimeVO();
-                            vo.setTitle(lecture.getLiName());
-                            vo.setType(lecture.getLiCode());
-                            vo.setStartDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdStart()).toString());
-                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).plusMinutes(50L).toString());
-                            resultList.add(vo);
-                        }
-                    }
-                }
+            for (TimetableStudentView view : timetableStudentViewRepository.findByMbSeqAndSiSeq(mbSeq, siSeq)) {
+                LectureTimeVO vo = new LectureTimeVO();
+                vo.setTitle(view.getLiName());
+                vo.setType(view.getLiCode());
+                vo.setStartDate(ConvertClassDateTime.convertClassDateTime(view.getAmasDate(), view.getCdStart()).toString());
+                vo.setEndDate(ConvertClassDateTime.convertClassDateTime(view.getAmasDate(), view.getCdLast()).plusMinutes(50L).toString());
+                resultList.add(vo);
             }
         }
         else if (professorOpt.isPresent()) {
-            List<LectureInfoEntity> lectureList = new ArrayList<>();
-            for (LectureInfoEntity lecture : lectureInfoRepository.findByProfessor(professorOpt.get())) {
-                if (lecture.getSemesterInfoEntity()==semester) {
-                    lectureList.add(lecture);
-                }
-            }
-            for (AttendInfoMasterEntity amasEntity : attendInfoMasterRepository.findAll()) {
-                for (LectureInfoEntity lecture : lectureList) {
-                    for (ClassDateEntity classDateEntity : classDateRepository.findByLecture(lecture)) {
-                        if (amasEntity.getAmasDate().getDayOfWeek().getValue()==classDateEntity.getCdWeek()) {
-                            LectureTimeVO vo = new LectureTimeVO();
-                            vo.setTitle(lecture.getLiName());
-                            vo.setType(lecture.getLiCode());
-                            vo.setStartDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdStart()).toString());
-                            vo.setEndDate(ConvertClassDateTime.convertClassDateTime(amasEntity.getAmasDate(), classDateEntity.getCdLast()).plusMinutes(50L).toString());
-                            resultList.add(vo);
-                        }
-                    }
-                }
+            for (TimetableProfessorView view : timetableProfessorViewRepository.findByMbSeqAndSiSeq(mbSeq, siSeq)) {
+                LectureTimeVO vo = new LectureTimeVO();
+                vo.setTitle(view.getLiName());
+                vo.setType(view.getLiCode());
+                vo.setStartDate(ConvertClassDateTime.convertClassDateTime(view.getAmasDate(), view.getCdStart()).toString());
+                vo.setEndDate(ConvertClassDateTime.convertClassDateTime(view.getAmasDate(), view.getCdLast()).plusMinutes(50L).toString());
+                resultList.add(vo);
             }
         }
         else {

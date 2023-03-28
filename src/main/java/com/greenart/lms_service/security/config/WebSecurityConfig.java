@@ -33,10 +33,14 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/**", "/api/login", "/swagger", "/swagger-ui", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/*", "/api/login", "/swagger", "/swagger-ui", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
+                    .requestMatchers("/api/mygrade/**").hasRole("S")
+                    .requestMatchers("/api/pro/**", "/api/lec/**", "/api/sco/**", "/api/final/**", "/api/atd/**").hasRole("P")
+                    .requestMatchers("/api/stf/lectures/**").hasRole("U")
+                    .requestMatchers("/api/timetable/**").hasAnyRole("S", "P")
+                    .anyRequest().authenticated()
+                )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
