@@ -166,4 +166,23 @@ class InsertDummyDataTests {
             }
         }
     }
+
+    @Test // 출석 데이터 랜덤 입력
+    void putAttendStudent() {
+        Random rand = new Random();
+        Integer cnt1 = 0;
+        Integer cnt0 = 0;
+        for (AttendInfoStudentEntity astu : attendInfoStudentRepository.findAll()) {
+            if (rand.nextInt(0, 10)<7)   {
+                astu.ChangeStatus(1);
+                cnt1++;
+            }
+            else {
+                astu.ChangeStatus(0);
+                cnt0++;
+            }
+            attendInfoStudentRepository.save(astu);
+        }
+        System.out.println("===== 출석수 : "+cnt1+", 결석수 : "+cnt0); // 입력 결과 확인용 (출석:결석 비율이 7:3이 되는지 확인)
+    }
 }

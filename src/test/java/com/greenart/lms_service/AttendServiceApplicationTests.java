@@ -150,35 +150,21 @@ class AttendServiceApplicationTests {
         }
     }
 
-    // @Test // 출결일 중 한 학생의 하루의 출석/결석 상태 변경
-    // void patchStuAttendDay() {
-    //     Long mbSeq = 1L;
-    //     Integer status = 0;
-    //     String strDate = "2023-02-28";
-    //     LocalDate date = LocalDate.parse(strDate, DateTimeFormatter.ISO_DATE);
-    //     MemberBasicEntity student = memberBasicRepository.findByMbSeq(mbSeq);
-    //     LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
-    //     AttendInfoMasterEntity data = attendInfoMasterRepository.findByLectureAndAmasDate(lecture, date);
-    //     AttendResponseVO attMas = new AttendResponseVO();
-    //     attMas.setDate(data.getAmasDate().toString());
-    //     List<AttendStuResponseVO> attStuList = new ArrayList<>();
+    @Test // 출결일 중 한 학생의 하루의 출석/결석 상태 변경
+    void patchStuAttendDay() {
+        LectureInfoEntity lecture = lectureInfoRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의입니다."));
+        StudentEntity student = studentRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 학생입니다."));
 
-    //     AttendInfoStudentEntity data2 = attendInfoStudentRepository.findByAttendInfoMasterAndStudent(data, student);
-    //     AttendStuResponseVO attStu = new AttendStuResponseVO();
-    //     attStu.setName(data2.getStudent().getMbName());
-    //     if (status==1) {
-    //         attStu.setStatus("O");
-    //     }
-    //     else if (status==0) {
-    //         attStu.setStatus("X");
-    //     }
-    //     attStuList.add(attStu);
-    //     data2.ChangeStatus(status);
-    //     attendInfoStudentRepository.save(data2);
+        ClassRegisterEntity classRegi = classRegisterRepository.findByLectureInfoAndStudent(lecture, student);
+        if (classRegi==null) throw new CustomException("강의에 학생이 없습니다.");
 
-    //     attMas.setList(attStuList);
-    //     System.out.println(attMas.toString());
-    // }
+        AttendInfoMasterEntity attendMas = attendInfoMasterRepository.findById(1L).orElseThrow(() -> new CustomException("존재하지 않는 강의일 입니다."));
+        AttendInfoStudentEntity attendStu = attendInfoStudentRepository.findByAttendInfoMasterAndStudent(attendMas, student);
+        if (attendStu==null) throw new CustomException("올바르지 않은 입력입니다.");
+
+        attendStu.ChangeStatus(1);
+        attendInfoStudentRepository.save(attendStu);
+    }
 
 	@Test // 강의의 과제리스트 조회
 	void getAssignmentInfo() {

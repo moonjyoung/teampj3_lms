@@ -33,14 +33,19 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
-                .authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers("/*", "/api/login", "/swagger", "/swagger-ui", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers("/api/mygrade/**").hasRole("S")
-                    .requestMatchers("/api/pro/**", "/api/lec/**", "/api/sco/**", "/api/final/**", "/api/atd/**").hasRole("P")
-                    .requestMatchers("/api/stf/lectures/**").hasRole("U")
-                    .requestMatchers("/api/timetable/**").hasAnyRole("S", "P")
-                    .anyRequest().authenticated()
-                )
+                // 프론트 개발이 얼추 마무리되면 아래 3줄 삭제하고 아래 주석 부활시켜서 시큐리티 적용
+                .authorizeHttpRequests()
+                .requestMatchers("/**", "/api/login", "/swagger", "/swagger-ui", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
+                .anyRequest().authenticated().and()
+                // 프론트 개발이 얼추 마무리되면 위 3줄 삭제하고 아래 주석 부활시켜서 시큐리티 적용
+                // .authorizeHttpRequests(authorize -> authorize
+                //     .requestMatchers("/*", "/api/login", "/swagger", "/swagger-ui", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
+                //     .requestMatchers("/api/mygrade/**").hasRole("S")
+                //     .requestMatchers("/api/pro/**", "/api/lec/**", "/api/sco/**", "/api/final/**", "/api/atd/**").hasRole("P")
+                //     .requestMatchers("/api/stf/lectures/**").hasRole("U")
+                //     .requestMatchers("/api/timetable/**").hasAnyRole("S", "P")
+                //     .anyRequest().authenticated()
+                // )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
